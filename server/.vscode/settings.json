@@ -1,0 +1,20 @@
+{
+  "editor.detectIndentation": false,
+  "editor.tabSize": 2,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "cSpell.userWords": [
+    "byteimg",
+    "mockjs",
+    "muazkh",
+    "nestjs",
+    "onaddstream",
+    "prebuild",
+    "tplv",
+    "typeorm",
+    "uwbnlip",
+    "viagenie",
+    "Yankaizhi"
+  ],
+  "cSpell.words": ["Inno", "runoob", "varchar"]
+}
