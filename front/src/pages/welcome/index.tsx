@@ -11,6 +11,7 @@ import styles from './style/index.module.less';
 export default function Welcome() {
   const locale = useLocale();
   const userInfo = useSelector((state: ReducerState) => state.global.userInfo) || {};
+  console.warn('userInfo', userInfo);
   return (
     <div className={styles.container}>
       <div className={styles.header}>

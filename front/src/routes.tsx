@@ -11,15 +11,9 @@ export const routes = [
     componentPath: 'welcome',
   },
   {
-    name: 'menu.list',
-    key: 'list',
+    name: '个人信息',
+    key: 'personal-info',
     icon: <IconList />,
-    children: [
-      {
-        name: 'menu.list.searchTable',
-        key: 'list/search-table',
-        componentPath: 'search-table',
-      },
-    ],
+    componentPath: 'personal-info',
   },
 ];

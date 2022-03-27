@@ -1,4 +1,4 @@
-# Arco Design Pro
+# CEG 会议系统客户端
 
 ## 快速开始
 
@@ -11,3 +11,4 @@ npm run dev
 
 // 构建
 npm run build
+
