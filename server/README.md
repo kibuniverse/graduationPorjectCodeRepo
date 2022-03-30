@@ -18,4 +18,7 @@ CREATE TABLE IF NOT EXISTS `t_user`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # 房间表
+CREATE TABLE IF NOT EXIST `t_room`(
+
+)
 ```

@@ -13,13 +13,19 @@ const app_service_1 = require("./app.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const pedants_type_module_1 = require("./pedants-type/pedants-type.module");
 const user_module_1 = require("./user/user.module");
+const logger_middleware_1 = require("./middleware/logger.middleware");
+const cats_controller_1 = require("./cats/cats.controller");
+const cats_service_1 = require("./cats/cats.service");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer.apply(logger_middleware_1.loggerMiddleware).forRoutes('cats');
+    }
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forRoot(), pedants_type_module_1.PedantsTypeModule, user_module_1.UserModule],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        controllers: [app_controller_1.AppController, cats_controller_1.CatsController],
+        providers: [app_service_1.AppService, cats_service_1.CatsService],
     })
 ], AppModule);
 exports.AppModule = AppModule;
