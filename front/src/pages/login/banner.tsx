@@ -7,18 +7,8 @@ import styles from './style/index.module.less';
 export default function LoginBannber() {
   const data = [
     {
-      slogan: '开箱即用的高质量模板',
-      subSlogan: '丰富的的页面模板，覆盖大多数典型业务场景',
-      image: bannerImage,
-    },
-    {
-      slogan: '内置了常见问题的解决方案',
-      subSlogan: '国际化，路由配置，状态管理应有尽有',
-      image: bannerImage,
-    },
-    {
-      slogan: '接入可视化增强工具AUX',
-      subSlogan: '实现灵活的区块式开发',
+      slogan: 'Connect Efficient Grace Meeting Systen',
+      subSlogan: '连接 高效 优雅的会议系统',
       image: bannerImage,
     },
   ];
