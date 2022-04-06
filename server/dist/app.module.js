@@ -12,10 +12,12 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const pedants_type_module_1 = require("./pedants-type/pedants-type.module");
-const user_module_1 = require("./user/user.module");
 const logger_middleware_1 = require("./middleware/logger.middleware");
 const cats_controller_1 = require("./cats/cats.controller");
 const cats_service_1 = require("./cats/cats.service");
+const users_service_1 = require("./users/users.service");
+const users_module_1 = require("./users/users.module");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.loggerMiddleware).forRoutes('cats');
@@ -23,9 +25,14 @@ let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forRoot(), pedants_type_module_1.PedantsTypeModule, user_module_1.UserModule],
-        controllers: [app_controller_1.AppController, cats_controller_1.CatsController],
-        providers: [app_service_1.AppService, cats_service_1.CatsService],
+        imports: [
+            typeorm_1.TypeOrmModule.forRoot(),
+            pedants_type_module_1.PedantsTypeModule,
+            users_module_1.UsersModule,
+            auth_module_1.AuthModule,
+        ],
+        controllers: [app_controller_1.AppController, cats_controller_1.CatsController, app_controller_1.AppController],
+        providers: [app_service_1.AppService, cats_service_1.CatsService, users_service_1.UsersService],
     })
 ], AppModule);
 exports.AppModule = AppModule;
