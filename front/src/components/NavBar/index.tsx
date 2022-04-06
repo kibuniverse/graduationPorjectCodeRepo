@@ -24,6 +24,7 @@ function Navbar() {
   const locale = useLocale();
   const theme = useSelector((state: ReducerState) => state.global.theme);
   const userInfo = useSelector((state: ReducerState) => state.global.userInfo);
+
   const dispatch = useDispatch();
 
   function logout() {

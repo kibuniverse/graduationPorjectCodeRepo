@@ -1,18 +1,22 @@
 import { Card, Form, Typography, Input, Button } from '@arco-design/web-react';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { ReducerState } from '../../redux';
 
 import styles from './index.module.less';
 
 const FormItem = Form.Item;
 
 export default function PersonalInfo() {
+  const userInfo = useSelector((state: ReducerState) => state.global.userInfo);
+  console.log(userInfo);
   return (
     <div>
       <div className={styles.header}>
         <Typography.Title heading={5} style={{ marginTop: 0 }}>
-          严凯治
+          {userInfo?.name}
         </Typography.Title>
-        <Typography.Text type="secondary">晚上好</Typography.Text>
+        <Typography.Text type="secondary">你好</Typography.Text>
       </div>
       <div className={styles.content}>
         <Card style={{ marginTop: 20 }} bordered={false} title="个人信息">

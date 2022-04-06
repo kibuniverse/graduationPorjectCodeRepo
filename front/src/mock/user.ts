@@ -7,8 +7,9 @@ setupMock({
 
     // 用户信息
     Mock.mock(new RegExp('/api/user/userInfo'), () => {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       return {
-        name: '王立群',
+        name: userInfo.username,
         avatar:
           'https://lf1-xgcdn-tos.pstatp.com/obj/vcloud/vadmin/start.8e0e4855ee346a46ccff8ff3e24db27b.png',
         email: 'wangliqun@email.com',
@@ -48,5 +49,32 @@ setupMock({
         msg: '账号或者密码错误',
       };
     });
+    Mock.mock(new RegExp('/api/user/register'), (params) => {
+      const { userName, password, email } = JSON.parse(params.body);
+      if (!userName) {
+        return {
+          status: 'error',
+          msg: '用户名不能为空',
+        };
+      }
+      if (!password) {
+        return {
+          status: 'error',
+          msg: '密码不能为空',
+        };
+      }
+      if (!email) {
+        return {
+          status: 'error',
+          msg: '邮件不能为空',
+        };
+      }
+
+      return {
+        status: 'ok',
+        msg: '注册成功',
+      };
+    });
   },
+  // 注册
 });

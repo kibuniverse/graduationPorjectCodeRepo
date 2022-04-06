@@ -31,7 +31,7 @@ const initialState: GlobalState = {
   settings: defaultSettings,
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case 'toggle-theme': {
       const { theme } = action.payload;
@@ -52,6 +52,14 @@ export default function (state = initialState, action) {
         settings,
       };
     }
+    case 'update-userInfo': {
+      const { userInfo } = action.payload;
+      return {
+        ...state,
+        userInfo,
+      };
+    }
+
     default:
       return state;
   }

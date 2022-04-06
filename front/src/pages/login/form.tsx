@@ -35,6 +35,8 @@ export default function LoginForm() {
       .then((res) => {
         const { status, msg } = res.data;
         if (status === 'ok') {
+          const { userName, password } = params;
+          window.localStorage.setItem('userInfo', JSON.stringify({ username: userName, password }));
           afterLoginSuccess(params);
         } else {
           setErrorMessage(msg || '登录出错，请刷新重试');
@@ -68,12 +70,12 @@ export default function LoginForm() {
       <div className={styles['login-form-error-msg']}>{errorMessage}</div>
       <Form className={styles['login-form']} layout="vertical" ref={formRef}>
         <Form.Item field="userName" rules={[{ required: true, message: '用户名不能为空' }]}>
-          <Input prefix={<IconUser />} placeholder="用户名：admin" onPressEnter={onSubmitClick} />
+          <Input prefix={<IconUser />} placeholder="请输入用户名" onPressEnter={onSubmitClick} />
         </Form.Item>
         <Form.Item field="password" rules={[{ required: true, message: '密码不能为空' }]}>
           <Input.Password
             prefix={<IconLock />}
-            placeholder="密码：admin"
+            placeholder="请输入密码"
             onPressEnter={onSubmitClick}
           />
         </Form.Item>
