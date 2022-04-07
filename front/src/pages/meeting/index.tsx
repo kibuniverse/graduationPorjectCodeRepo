@@ -11,7 +11,11 @@ export default function Meeting() {
 
   const switchBegin = () => {
     if (isBegin) {
-      setMediaStream({ audio: false, video: false });
+      const pc1Video: HTMLVideoElement = document.querySelector('#pc1');
+      const pc2Video: HTMLVideoElement = document.querySelector('#pc2');
+
+      pc1Video.srcObject = null;
+      pc2Video.srcObject = null;
     }
     setIsBegin(!isBegin);
   };

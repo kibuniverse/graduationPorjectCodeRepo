@@ -18,9 +18,10 @@ const cats_service_1 = require("./cats/cats.service");
 const users_service_1 = require("./users/users.service");
 const users_module_1 = require("./users/users.module");
 const auth_module_1 = require("./auth/auth.module");
+const users_controller_1 = require("./users/users.controller");
 let AppModule = class AppModule {
     configure(consumer) {
-        consumer.apply(logger_middleware_1.loggerMiddleware).forRoutes('cats');
+        consumer.apply(logger_middleware_1.loggerMiddleware).forRoutes('users');
     }
 };
 AppModule = __decorate([
@@ -31,7 +32,7 @@ AppModule = __decorate([
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
         ],
-        controllers: [app_controller_1.AppController, cats_controller_1.CatsController, app_controller_1.AppController],
+        controllers: [app_controller_1.AppController, cats_controller_1.CatsController, app_controller_1.AppController, users_controller_1.UsersController],
         providers: [app_service_1.AppService, cats_service_1.CatsService, users_service_1.UsersService],
     })
 ], AppModule);

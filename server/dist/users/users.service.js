@@ -18,6 +18,21 @@ let UsersService = class UsersService {
     async findOne(userName) {
         return this.users.find((user) => user.userName === userName);
     }
+    async register(userName, password, email) {
+        const user = { userId: this.users.length + 1, userName, password, email };
+        this.users.push(user);
+        return user;
+    }
+    async findAll() {
+        return this.users;
+    }
+    async login(userName, password) {
+        const user = this.users.find((user) => user.userName === userName);
+        if (user && user.password === password) {
+            return user;
+        }
+        return null;
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)()

@@ -9,6 +9,7 @@ import { CatsService } from './cats/cats.service';
 import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersController } from './users/users.controller';
 
 @Module({
   imports: [
@@ -17,11 +18,11 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     AuthModule,
   ],
-  controllers: [AppController, CatsController, AppController],
+  controllers: [AppController, CatsController, AppController, UsersController],
   providers: [AppService, CatsService, UsersService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(loggerMiddleware).forRoutes('cats');
+    consumer.apply(loggerMiddleware).forRoutes('users');
   }
 }

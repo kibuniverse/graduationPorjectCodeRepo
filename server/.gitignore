@@ -2,3 +2,5 @@
 **/node_modules/**
 # 数据库配置
 ormconfig.json
+
+dist

@@ -8,8 +8,13 @@ import styles from './index.module.less';
 const FormItem = Form.Item;
 
 export default function PersonalInfo() {
+  const [form] = Form.useForm();
   const userInfo = useSelector((state: ReducerState) => state.global.userInfo);
-  console.log(userInfo);
+
+  const handleChangePassword = (value: Record<string, any>) => {
+    console.log(value);
+  };
+
   return (
     <div>
       <div className={styles.header}>
@@ -21,15 +26,15 @@ export default function PersonalInfo() {
       <div className={styles.content}>
         <Card style={{ marginTop: 20 }} bordered={false} title="个人信息">
           <h4>修改密码</h4>
-          <Form layout="vertical">
-            <FormItem label="旧密码" field="username" rules={[{ required: true }]}>
+          <Form layout="vertical" form={form} onSubmit={handleChangePassword}>
+            <FormItem label="旧密码" field="oldPassowrd" rules={[{ required: true }]}>
               <Input style={{ width: 270 }} placeholder="please enter your old password" />
             </FormItem>
-            <FormItem label="新密码" rules={[{ required: true }]}>
+            <FormItem label="新密码" field="newPassowrd" rules={[{ required: true }]}>
               <Input style={{ width: 270 }} placeholder="please enter your new password" />
             </FormItem>
             <FormItem>
-              <Button type="primary" htmlType="submit">
+              <Button onClick={handleChangePassword} type="primary" htmlType="submit">
                 Submit
               </Button>
             </FormItem>

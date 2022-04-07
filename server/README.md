@@ -17,8 +17,14 @@ CREATE TABLE IF NOT EXISTS `t_user`(
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-# 房间表
+# 会议房间表
 CREATE TABLE IF NOT EXIST `t_room`(
-
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '房间id',
+  `name` varchar(11) NOT NULL DEFAULT '' COMMENT '房间名称',
+  `create_user_id`  int(11) NOT NULL COMMENT '创建房间的用户id',
+  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+  `begin_time` datetime(6) NULL DEFAULT NULL COMMENT '预计开始时间', 
+  `end_time` datetime(6) NULL DEFAULT NULL COMMENT '预计结束时间',
+  `max_capacity` int(5) NULL DEFAULT NULL COMMENT '房间最大容量'
 )
 ```

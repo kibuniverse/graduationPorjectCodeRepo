@@ -12,4 +12,22 @@ export class UsersService {
   async findOne(userName: string): Promise<User | undefined> {
     return this.users.find((user) => user.userName === userName);
   }
+
+  async register(userName: string, password: string, email: string) {
+    const user = { userId: this.users.length + 1, userName, password, email };
+    this.users.push(user);
+    return user;
+  }
+
+  async findAll() {
+    return this.users;
+  }
+
+  async login(userName, password) {
+    const user = this.users.find((user) => user.userName === userName);
+    if (user && user.password === password) {
+      return user;
+    }
+    return null;
+  }
 }
