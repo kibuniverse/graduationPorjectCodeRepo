@@ -5,7 +5,11 @@ import { User } from './entities/user.entity';
 export declare class UsersService {
     private UserRepository;
     constructor(UserRepository: Repository<User>);
-    create(createUserDto: CreateUserDto): Promise<CreateUserDto & User>;
+    create(createUserDto: CreateUserDto): Promise<{
+        data: any;
+        msg: string;
+        status: number;
+    }>;
     findAll(): Promise<User[]>;
     findOne(id: number): Promise<User>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<import("typeorm").UpdateResult>;

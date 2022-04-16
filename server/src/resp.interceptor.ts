@@ -11,7 +11,7 @@ export class RespInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        return { data, status: 1, msg: 'success' };
+        return { ...data };
       }),
     );
   }

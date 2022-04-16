@@ -15,15 +15,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const handleResponse_1 = require("../utils/handleResponse");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./entities/user.entity");
 let UsersService = class UsersService {
     constructor(UserRepository) {
         this.UserRepository = UserRepository;
     }
-    create(createUserDto) {
+    async create(createUserDto) {
+        const checkUser = await this.UserRepository.findOne({
+            where: { username: createUserDto.username },
+        });
+        if (checkUser) {
+            return (0, handleResponse_1.failResponse)(null, '用户名已存在');
+        }
         createUserDto.isDelete = false;
-        return this.UserRepository.save(createUserDto);
+        const res = await this.UserRepository.save(createUserDto);
+        return (0, handleResponse_1.successResponse)(res, '注册成功');
     }
     findAll() {
         return this.UserRepository.find({ where: { isDelete: false } });

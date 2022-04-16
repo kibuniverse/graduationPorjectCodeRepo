@@ -14,9 +14,10 @@ const typeorm_1 = require("@nestjs/typeorm");
 const users_module_1 = require("./users/users.module");
 const user_entity_1 = require("./users/entities/user.entity");
 const auth_middleware_1 = require("./middleware/auth.middleware");
+const users_service_1 = require("./users/users.service");
 let AppModule = class AppModule {
     configure(consumer) {
-        consumer.apply(auth_middleware_1.AuthMiddleware).forRoutes('users');
+        consumer.apply(auth_middleware_1.AuthMiddleware).forRoutes();
     }
 };
 AppModule = __decorate([
@@ -32,11 +33,11 @@ AppModule = __decorate([
                 entities: [user_entity_1.User],
                 synchronize: true,
             }),
-            typeorm_1.TypeOrmModule.forFeature([]),
+            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
             users_module_1.UsersModule,
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [app_service_1.AppService, users_service_1.UsersService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

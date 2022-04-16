@@ -31,16 +31,19 @@ export default function LoginForm() {
   function login(params) {
     setErrorMessage('');
     setLoading(true);
+    console.log(params);
     axios
-      .post('/api/user/login', params)
+      .post('http://127.0.0.1:3000/login/', params)
       .then((res) => {
-        const { status, msg } = res.data;
-        if (status === 'ok') {
-          const { userName, password } = params;
-          window.localStorage.setItem('userInfo', JSON.stringify({ username: userName, password }));
-          afterLoginSuccess(params);
-        } else {
-          setErrorMessage(msg || '登录出错，请刷新重试');
+        const { data: resData } = res;
+        if (resData) {
+          const { status, msg, data } = resData;
+          if (status === 1) {
+            window.localStorage.setItem('userInfo', JSON.stringify({ ...data }));
+            afterLoginSuccess(params);
+          } else {
+            setErrorMessage(msg || '登录出错，请刷新重试');
+          }
         }
       })
       .finally(() => {
@@ -50,21 +53,20 @@ export default function LoginForm() {
 
   function register(params) {
     setErrorMessage('');
-
     setLoading(true);
-    fetch('http://127.0.0.1:3000/users/register', {
-      method: 'POST',
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(params),
-    })
+
+    axios
+      .post('http://127.0.0.1:3000/users', params)
       .then((res) => {
-        const { status, msg } = res.data;
-        if (status === 'ok') {
-          const { userName, password } = params;
-          window.localStorage.setItem('userInfo', JSON.stringify({ username: userName, password }));
-          afterLoginSuccess(params);
-        } else {
-          setErrorMessage(msg || '注册出错，请刷新重试');
+        const { data: resData } = res;
+        if (resData) {
+          const { status, msg, data } = resData;
+          if (status === 1) {
+            window.localStorage.setItem('userInfo', JSON.stringify({ ...data }));
+            afterLoginSuccess(params);
+          } else {
+            setErrorMessage(msg || '注册出错，请刷新重试');
+          }
         }
       })
       .finally(() => {
@@ -105,7 +107,7 @@ export default function LoginForm() {
       <Form className={styles['login-form']} layout="vertical" ref={formRef}>
         {submitType === 'login' ? (
           <>
-            <Form.Item field="userName" rules={[{ required: true, message: '用户名不能为空' }]}>
+            <Form.Item field="username" rules={[{ required: true, message: '用户名不能为空' }]}>
               <Input
                 prefix={<IconUser />}
                 placeholder="请输入用户名"
@@ -128,14 +130,22 @@ export default function LoginForm() {
           </>
         ) : (
           <>
-            <Form.Item field="userName" rules={[{ required: true, message: '用户名不能为空' }]}>
+            <Form.Item field="username" rules={[{ required: true, message: '用户名不能为空' }]}>
               <Input
                 prefix={<IconUser />}
                 placeholder="请输入用户名"
                 onPressEnter={onSubmitClick}
               />
             </Form.Item>
-            <Form.Item field="password" rules={[{ required: true, message: '密码不能为空' }]}>
+            <Form.Item
+              field="password"
+              rules={[
+                {
+                  required: true,
+                  message: '密码不能为空',
+                },
+              ]}
+            >
               <Input.Password
                 prefix={<IconLock />}
                 placeholder="请输入密码"
@@ -149,7 +159,13 @@ export default function LoginForm() {
         )}
 
         <Space size={16} direction="vertical">
-          <Button type="primary" long onClick={onSubmitClick} loading={loading}>
+          <Button
+            style={{ marginTop: '16px' }}
+            type="primary"
+            long
+            onClick={onSubmitClick}
+            loading={loading}
+          >
             {submitType === 'login' ? '登录' : '注册'}
           </Button>
           <Button

@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { failResponse, successResponse } from 'src/utils/handleResponse';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
@@ -12,9 +14,16 @@ export class UsersService {
     private UserRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
+    const checkUser = await this.UserRepository.findOne({
+      where: { username: createUserDto.username },
+    });
+    if (checkUser) {
+      return failResponse(null, '用户名已存在');
+    }
     createUserDto.isDelete = false;
-    return this.UserRepository.save(createUserDto);
+    const res = await this.UserRepository.save(createUserDto);
+    return successResponse(res, '注册成功');
   }
 
   findAll() {
