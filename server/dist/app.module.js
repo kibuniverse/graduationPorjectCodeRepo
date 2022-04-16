@@ -13,7 +13,11 @@ const app_service_1 = require("./app.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_module_1 = require("./users/users.module");
 const user_entity_1 = require("./users/entities/user.entity");
+const auth_middleware_1 = require("./middleware/auth.middleware");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer.apply(auth_middleware_1.AuthMiddleware).forRoutes('users');
+    }
 };
 AppModule = __decorate([
     (0, common_1.Module)({

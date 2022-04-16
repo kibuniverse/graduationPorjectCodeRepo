@@ -3,6 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { RespInterceptor } from './resp.interceptor';
+import * as CookieParser from 'cookie-parser';
+import { HandleExceptionFilter } from './handle-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +13,12 @@ async function bootstrap() {
   app.useGlobalInterceptors(new RespInterceptor());
   // 数据验证
   app.useGlobalPipes(new ValidationPipe());
+  // 处理异常
+  app.useGlobalFilters(new HandleExceptionFilter());
+  // 解析 cookie
+  app.use(CookieParser());
+  // 允许跨域和传递 cookie
+  app.enableCors({ origin: true, credentials: true });
 
   const config = new DocumentBuilder()
     .setTitle('ceg 系统后端')
@@ -21,7 +29,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  app.enableCors();
   await app.listen(3000);
 }
 bootstrap();
