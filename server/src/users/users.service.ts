@@ -1,33 +1,35 @@
 import { Injectable } from '@nestjs/common';
-
-export type User = { userId: number; userName: string; password: string };
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    { userId: 1, userName: 'a', password: 'abc' },
-    { userId: 2, userName: 'b', password: 'abc' },
-  ];
-  // 以用户名查找用户对象
-  async findOne(userName: string): Promise<User | undefined> {
-    return this.users.find((user) => user.userName === userName);
+  constructor(
+    @InjectRepository(User)
+    private UserRepository: Repository<User>,
+  ) {}
+
+  create(createUserDto: CreateUserDto) {
+    createUserDto.isDelete = false;
+    return this.UserRepository.save(createUserDto);
   }
 
-  async register(userName: string, password: string, email: string) {
-    const user = { userId: this.users.length + 1, userName, password, email };
-    this.users.push(user);
-    return user;
+  findAll() {
+    return this.UserRepository.find({ where: { isDelete: false } });
   }
 
-  async findAll() {
-    return this.users;
+  findOne(id: number) {
+    return this.UserRepository.findOne({ where: { id } });
   }
 
-  async login(userName, password) {
-    const user = this.users.find((user) => user.userName === userName);
-    if (user && user.password === password) {
-      return user;
-    }
-    return null;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return await this.UserRepository.update(id, updateUserDto);
+  }
+
+  remove(id: number) {
+    return this.UserRepository.delete({ id });
   }
 }

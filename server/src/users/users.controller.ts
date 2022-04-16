@@ -1,38 +1,43 @@
-import { Bind, Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
-  @Post('/register')
-  @Bind(Body())
-  async register(body) {
-    return this.userService.register('yankaizhi', 'Kzkz', 'kaizi');
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
   }
 
-  @Get('/all')
-  async findAll() {
-    return this.userService.findAll();
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
   }
 
-  @Post('/login')
-  @Bind(Body())
-  async login(body) {
-    const res = await this.userService.login(body.userName, body.password);
-    if (res) {
-      return {
-        data: {
-          status: 'ok',
-          message: '成功',
-        },
-      };
-    }
-    return {
-      data: {
-        status: 'error',
-        message: '用户名或密码错误',
-      },
-    };
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(+id, updateUserDto);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    const deleteUserDto: UpdateUserDto = { isDelete: true };
+    return await this.usersService.update(+id, deleteUserDto);
   }
 }

@@ -20,11 +20,17 @@ CREATE TABLE IF NOT EXISTS `t_user`(
 # 会议房间表
 CREATE TABLE IF NOT EXIST `t_room`(
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '房间id',
-  `name` varchar(11) NOT NULL DEFAULT '' COMMENT '房间名称',
+  `title` varchar(11) NOT NULL DEFAULT '' COMMENT '会议主题',
   `create_user_id`  int(11) NOT NULL COMMENT '创建房间的用户id',
   `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
   `begin_time` datetime(6) NULL DEFAULT NULL COMMENT '预计开始时间', 
   `end_time` datetime(6) NULL DEFAULT NULL COMMENT '预计结束时间',
   `max_capacity` int(5) NULL DEFAULT NULL COMMENT '房间最大容量'
+)
+
+# 在线用户
+CREATE TABLE IF NOT EXIST `t_live_user`(
+  `user_id` int(11) NOT NULL DEFAULT NULL COMMENT '用户id',
+  `status` varchar(5) NOT NULL DEFAULT '',
 )
 ```

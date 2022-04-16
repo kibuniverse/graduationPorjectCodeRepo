@@ -11,29 +11,28 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const typeorm_1 = require("@nestjs/typeorm");
-const pedants_type_module_1 = require("./pedants-type/pedants-type.module");
-const logger_middleware_1 = require("./middleware/logger.middleware");
-const cats_controller_1 = require("./cats/cats.controller");
-const cats_service_1 = require("./cats/cats.service");
-const users_service_1 = require("./users/users.service");
 const users_module_1 = require("./users/users.module");
-const auth_module_1 = require("./auth/auth.module");
-const users_controller_1 = require("./users/users.controller");
+const user_entity_1 = require("./users/entities/user.entity");
 let AppModule = class AppModule {
-    configure(consumer) {
-        consumer.apply(logger_middleware_1.loggerMiddleware).forRoutes('users');
-    }
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forRoot(),
-            pedants_type_module_1.PedantsTypeModule,
+            typeorm_1.TypeOrmModule.forRoot({
+                type: 'mysql',
+                host: 'localhost',
+                port: 3306,
+                username: 'root',
+                password: 'Yankaizhi123.',
+                database: 'seg',
+                entities: [user_entity_1.User],
+                synchronize: true,
+            }),
+            typeorm_1.TypeOrmModule.forFeature([]),
             users_module_1.UsersModule,
-            auth_module_1.AuthModule,
         ],
-        controllers: [app_controller_1.AppController, cats_controller_1.CatsController, app_controller_1.AppController, users_controller_1.UsersController],
-        providers: [app_service_1.AppService, cats_service_1.CatsService, users_service_1.UsersService],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 exports.AppModule = AppModule;
