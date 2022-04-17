@@ -30,6 +30,7 @@ let UsersService = class UsersService {
             return (0, handleResponse_1.failResponse)(null, '用户名已存在');
         }
         createUserDto.isDelete = false;
+        console.log(createUserDto);
         const res = await this.UserRepository.save(createUserDto);
         return (0, handleResponse_1.successResponse)(res, '注册成功');
     }

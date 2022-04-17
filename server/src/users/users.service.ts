@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { failResponse, successResponse } from 'src/utils/handleResponse';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { LoginDto } from './dto/login.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
@@ -22,6 +21,8 @@ export class UsersService {
       return failResponse(null, '用户名已存在');
     }
     createUserDto.isDelete = false;
+    console.log(createUserDto);
+
     const res = await this.UserRepository.save(createUserDto);
     return successResponse(res, '注册成功');
   }

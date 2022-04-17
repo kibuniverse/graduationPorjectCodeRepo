@@ -15,6 +15,8 @@ const users_module_1 = require("./users/users.module");
 const user_entity_1 = require("./users/entities/user.entity");
 const auth_middleware_1 = require("./middleware/auth.middleware");
 const users_service_1 = require("./users/users.service");
+const meeting_module_1 = require("./meeting/meeting.module");
+const meeting_entity_1 = require("./meeting/entities/meeting.entity");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(auth_middleware_1.AuthMiddleware).forRoutes();
@@ -30,11 +32,12 @@ AppModule = __decorate([
                 username: 'root',
                 password: 'Yankaizhi123.',
                 database: 'seg',
-                entities: [user_entity_1.User],
+                entities: [user_entity_1.User, meeting_entity_1.Meeting],
                 synchronize: true,
             }),
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
             users_module_1.UsersModule,
+            meeting_module_1.MeetingModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, users_service_1.UsersService],

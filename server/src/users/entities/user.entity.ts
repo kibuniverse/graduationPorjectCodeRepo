@@ -20,10 +20,10 @@ export class User {
   @Column({ length: 30 })
   email: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   createDate: string;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updateDate: string;
 
   @Column()
