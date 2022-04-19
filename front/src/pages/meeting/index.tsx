@@ -11,16 +11,18 @@ import {
 } from '@arco-design/web-react';
 import _ from 'lodash';
 import dayjs from 'dayjs';
+import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
 import { getUserId, post, ResponseStatus } from '../../utils';
+import { meetingApi } from '../../utils/api';
+import { MeetingInfo } from '../meeting-list/type';
 
 const FormItem = Form.Item;
 
 export default function Meeting() {
   const [form] = Form.useForm();
-
+  const history = useHistory();
   const handleSubmit = _.throttle((v) => {
-    console.log(v);
     const beginTime = String(dayjs(v.beginTime).unix());
     const endTime = String(dayjs(v.endTime).unix());
     const uid = getUserId();
@@ -36,9 +38,10 @@ export default function Meeting() {
       endTime,
     };
 
-    post({ url: 'http://127.0.0.1:3000/meeting', data: param }).then((res) => {
+    post<MeetingInfo>({ url: meetingApi.createMeeting.url, data: param }).then((res) => {
       if (res.status === ResponseStatus.success) {
         Message.success('创建成功');
+        history.push(`/meeting-list/detail?id=${res.data.id}`);
       }
     });
   }, 2000);

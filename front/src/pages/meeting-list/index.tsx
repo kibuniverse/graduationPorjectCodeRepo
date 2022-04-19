@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import styles from './index.module.less';
 import { MeetingItem, SelectStatus } from './type';
 import { get, ResponseStatus } from '../../utils';
+import { meetingApi } from '../../utils/api';
 
 const TabPane = Tabs.TabPane;
 
@@ -48,8 +49,7 @@ export default function MeetingList() {
   ];
 
   React.useEffect(() => {
-    const uid = localStorage.getItem('uid');
-    get<MeetingItem[]>(`http://127.0.0.1:3000/meeting/user-meeting-list?uid=${uid}`).then((res) => {
+    get<MeetingItem[]>(meetingApi.getUserMeetingList.url).then((res) => {
       if (res.status === ResponseStatus.success) {
         setAllMeetingList(res.data.map((item) => ({ ...item, key: item.id })));
       } else {

@@ -41,40 +41,42 @@ function getFlattenRoutes() {
 function renderRoutes(locale) {
   const nodes = [];
   function travel(_routes, level) {
-    return _routes.map((route) => {
-      const titleDom = (
-        <>
-          {route.icon} {locale[route.name] || route.name}
-        </>
-      );
-      if (
-        route.component &&
-        (!isArray(route.children) || (isArray(route.children) && !route.children.length))
-      ) {
-        if (level > 1) {
-          return <MenuItem key={route.key}>{titleDom}</MenuItem>;
-        }
-        nodes.push(
-          <MenuItem key={route.key}>
-            <Link to={`/${route.key}`}>{titleDom}</Link>
-          </MenuItem>
+    return _routes
+      .filter((router) => !router.notInMenu)
+      .map((route) => {
+        const titleDom = (
+          <>
+            {route.icon} {locale[route.name] || route.name}
+          </>
         );
-      }
-      if (isArray(route.children) && route.children.length) {
-        if (level > 1) {
-          return (
+        if (
+          route.component &&
+          (!isArray(route.children) || (isArray(route.children) && !route.children.length))
+        ) {
+          if (level > 1) {
+            return <MenuItem key={route.key}>{titleDom}</MenuItem>;
+          }
+          nodes.push(
+            <MenuItem key={route.key}>
+              <Link to={`/${route.key}`}>{titleDom}</Link>
+            </MenuItem>
+          );
+        }
+        if (isArray(route.children) && route.children.length) {
+          if (level > 1) {
+            return (
+              <SubMenu key={route.key} title={titleDom}>
+                {travel(route.children, level + 1)}
+              </SubMenu>
+            );
+          }
+          nodes.push(
             <SubMenu key={route.key} title={titleDom}>
               {travel(route.children, level + 1)}
             </SubMenu>
           );
         }
-        nodes.push(
-          <SubMenu key={route.key} title={titleDom}>
-            {travel(route.children, level + 1)}
-          </SubMenu>
-        );
-      }
-    });
+      });
   }
   travel(routes, 1);
   return nodes;
