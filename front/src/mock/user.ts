@@ -2,6 +2,8 @@ import Mock from 'mockjs';
 import setupMock from '../utils/setupMock';
 
 setupMock({
+  mock: false,
+
   setup() {
     Mock.XHR.prototype.withCredentials = true;
 

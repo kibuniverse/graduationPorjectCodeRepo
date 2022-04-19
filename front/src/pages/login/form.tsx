@@ -31,7 +31,7 @@ export default function LoginForm() {
   function login(params) {
     setErrorMessage('');
     setLoading(true);
-    console.log(params);
+
     axios
       .post('http://127.0.0.1:3000/login/', params)
       .then((res) => {
@@ -40,6 +40,7 @@ export default function LoginForm() {
           const { status, msg, data } = resData;
           if (status === 1) {
             window.localStorage.setItem('userInfo', JSON.stringify({ ...data }));
+            window.localStorage.setItem('uid', data.id);
             afterLoginSuccess(params);
           } else {
             setErrorMessage(msg || '登录出错，请刷新重试');
