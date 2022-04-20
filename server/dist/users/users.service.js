@@ -19,11 +19,11 @@ const handleResponse_1 = require("../utils/handleResponse");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./entities/user.entity");
 let UsersService = class UsersService {
-    constructor(UserRepository) {
-        this.UserRepository = UserRepository;
+    constructor(userRepository) {
+        this.userRepository = userRepository;
     }
     async create(createUserDto) {
-        const checkUser = await this.UserRepository.findOne({
+        const checkUser = await this.userRepository.findOne({
             where: { username: createUserDto.username },
         });
         if (checkUser) {
@@ -31,20 +31,20 @@ let UsersService = class UsersService {
         }
         createUserDto.isDelete = false;
         console.log(createUserDto);
-        const res = await this.UserRepository.save(createUserDto);
+        const res = await this.userRepository.save(createUserDto);
         return (0, handleResponse_1.successResponse)(res, '注册成功');
     }
     findAll() {
-        return this.UserRepository.find({ where: { isDelete: false } });
+        return this.userRepository.find({ where: { isDelete: false } });
     }
     findOne(id) {
-        return this.UserRepository.findOne({ where: { id } });
+        return this.userRepository.findOne({ where: { id } });
     }
     async update(id, updateUserDto) {
-        return await this.UserRepository.update(id, updateUserDto);
+        return await this.userRepository.update(id, updateUserDto);
     }
     remove(id) {
-        return this.UserRepository.delete({ id });
+        return this.userRepository.delete({ id });
     }
 };
 UsersService = __decorate([

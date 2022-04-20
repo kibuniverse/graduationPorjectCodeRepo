@@ -10,11 +10,11 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private UserRepository: Repository<User>,
+    private userRepository: Repository<User>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const checkUser = await this.UserRepository.findOne({
+    const checkUser = await this.userRepository.findOne({
       where: { username: createUserDto.username },
     });
     if (checkUser) {
@@ -23,23 +23,23 @@ export class UsersService {
     createUserDto.isDelete = false;
     console.log(createUserDto);
 
-    const res = await this.UserRepository.save(createUserDto);
+    const res = await this.userRepository.save(createUserDto);
     return successResponse(res, '注册成功');
   }
 
   findAll() {
-    return this.UserRepository.find({ where: { isDelete: false } });
+    return this.userRepository.find({ where: { isDelete: false } });
   }
 
   findOne(id: number) {
-    return this.UserRepository.findOne({ where: { id } });
+    return this.userRepository.findOne({ where: { id } });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return await this.UserRepository.update(id, updateUserDto);
+    return await this.userRepository.update(id, updateUserDto);
   }
 
   remove(id: number) {
-    return this.UserRepository.delete({ id });
+    return this.userRepository.delete({ id });
   }
 }

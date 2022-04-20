@@ -1,6 +1,8 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateMeetingDto {
+  id?: number;
+
   @IsNotEmpty({ message: '会议名称不能为空' })
   title: string;
 

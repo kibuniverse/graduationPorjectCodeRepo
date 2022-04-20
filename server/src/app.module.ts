@@ -8,6 +8,7 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { UsersService } from './users/users.service';
 import { MeetingModule } from './meeting/meeting.module';
 import { Meeting } from './meeting/entities/meeting.entity';
+import { LivingModule } from './living/living.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { Meeting } from './meeting/entities/meeting.entity';
     TypeOrmModule.forFeature([User]),
     UsersModule,
     MeetingModule,
+    LivingModule,
   ],
   controllers: [AppController],
   providers: [AppService, UsersService],

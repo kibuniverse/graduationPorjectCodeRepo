@@ -26,6 +26,11 @@ export class MeetingController {
     return await this.meetingService.findOne(uid);
   }
 
+  @Get('/detail')
+  async meetingDetail(@Query('id') id: string) {
+    return await this.meetingService.getMeetingDetailByMeetingId(Number(id));
+  }
+
   @Get()
   findAll() {
     return this.meetingService.findAll();
@@ -36,9 +41,9 @@ export class MeetingController {
     return this.meetingService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMeetingDto: UpdateMeetingDto) {
-    return this.meetingService.update(+id, updateMeetingDto);
+  @Post('/update')
+  update(@Body() updateMeetingDto: UpdateMeetingDto) {
+    return this.meetingService.update(updateMeetingDto);
   }
 
   @Delete(':id')

@@ -3,8 +3,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 export declare class UsersService {
-    private UserRepository;
-    constructor(UserRepository: Repository<User>);
+    private userRepository;
+    constructor(userRepository: Repository<User>);
     create(createUserDto: CreateUserDto): Promise<{
         data: any;
         msg: string;

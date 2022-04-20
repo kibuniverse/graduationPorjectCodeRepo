@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { handleRetry, InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
 import { genRandom, HandleResp } from 'src/utils';
 import { Repository } from 'typeorm';
 import { CreateMeetingDto } from './dto/create-meeting.dto';
@@ -11,6 +12,8 @@ export class MeetingService {
   constructor(
     @InjectRepository(Meeting)
     private meetingRepository: Repository<Meeting>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   async create(createMeetingDto: CreateMeetingDto) {
@@ -30,6 +33,17 @@ export class MeetingService {
     return this.meetingRepository.find();
   }
 
+  async getMeetingDetailByMeetingId(id: number) {
+    const meetingInfo = await this.meetingRepository.findOne({ where: { id } });
+    const userInfo = await this.userRepository.findOne({
+      where: { id: meetingInfo.createUserId },
+    });
+    return HandleResp.successResponse({
+      ...meetingInfo,
+      createUserInfo: userInfo,
+    });
+  }
+
   async findOne(id: number) {
     const meeting = await this.meetingRepository.find({
       where: {
@@ -39,8 +53,21 @@ export class MeetingService {
     return HandleResp.successResponse(meeting);
   }
 
-  update(id: number, updateMeetingDto: UpdateMeetingDto) {
-    return `This action updates a #${id} meeting`;
+  async update(updateMeetingDto: UpdateMeetingDto) {
+    const res = await this.meetingRepository.update(
+      { id: updateMeetingDto.id },
+      updateMeetingDto,
+    );
+    console.log('res', res);
+
+    if (res) {
+      const meeting = await this.meetingRepository.find({
+        where: {
+          id: updateMeetingDto.id,
+        },
+      });
+      return HandleResp.successResponse(meeting);
+    }
   }
 
   remove(id: number) {
