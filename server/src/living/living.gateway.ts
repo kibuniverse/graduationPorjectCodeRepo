@@ -37,6 +37,8 @@ export class LivingGateway
    * 链接成功
    */
   handleConnection(client: Socket) {
+    const cookie = client.request.headers.cookie;
+    console.log('id', cookie);
     this.connectCounts += 1;
     this.allNum += 1;
     this.users[client.id] = `user-${this.connectCounts}`;

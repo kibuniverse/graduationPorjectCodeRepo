@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Card, Typography, Descriptions } from '@arco-design/web-react';
+import { Card, Typography, Descriptions, Button } from '@arco-design/web-react';
 import dayjs from 'dayjs';
+import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
 import { get, ResponseStatus } from '../../../utils';
 import getUrlParams from '../../../utils/getUrlParams';
@@ -9,6 +10,7 @@ import { MeetingInfo } from '../type';
 
 export default function Meeting() {
   const [meetingInfo, setMeetingInfo] = React.useState<MeetingInfo>();
+  const history = useHistory();
   const describe = React.useMemo(() => {
     if (meetingInfo) {
       return [
@@ -55,13 +57,33 @@ export default function Meeting() {
       <div className={styles.content}>
         <Card>
           {describe && (
-            <Descriptions
-              size="large"
-              column={1}
-              data={describe}
-              style={{ marginBottom: 20 }}
-              labelStyle={{ paddingRight: 50 }}
-            />
+            <>
+              <Descriptions
+                size="large"
+                column={1}
+                data={describe}
+                style={{ marginBottom: 20 }}
+                labelStyle={{ paddingRight: 50 }}
+              />
+
+              <Button
+                style={{ marginRight: '12px' }}
+                type="primary"
+                onClick={() => {
+                  history.push(`/meeting?id=${meetingInfo.id}`);
+                }}
+              >
+                修改
+              </Button>
+              <Button
+                type="secondary"
+                onClick={() => {
+                  history.push(`/meeting?id=${meetingInfo.id}`);
+                }}
+              >
+                删除
+              </Button>
+            </>
           )}
         </Card>
       </div>

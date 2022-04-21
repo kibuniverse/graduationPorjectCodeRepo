@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Tabs, Typography, Table, Message } from '@arco-design/web-react';
+import { Tabs, Typography, Table, Message, Button } from '@arco-design/web-react';
 import dayjs from 'dayjs';
+import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
 import { MeetingItem, SelectStatus } from './type';
 import { get, ResponseStatus } from '../../utils';
@@ -11,6 +12,8 @@ const TabPane = Tabs.TabPane;
 export default function MeetingList() {
   const [allMeetingList, setAllMeetingList] = React.useState<MeetingItem[]>([]);
   const [meetingStatus, setMeetingStatus] = React.useState<SelectStatus>(SelectStatus.All);
+  const history = useHistory();
+
   const showMeetingList = React.useMemo(() => {
     const currentTime = dayjs().unix();
     switch (meetingStatus) {
@@ -45,6 +48,44 @@ export default function MeetingList() {
     {
       title: '最大人数限制',
       dataIndex: 'maxCapacity',
+    },
+    {
+      title: '',
+      dataIndex: 'operate',
+      render: (_: string, record: MeetingItem) => {
+        return (
+          <>
+            <Button
+              type="text"
+              onClick={() => {
+                history.push(`/meeting-list/detail?id=${record.id}`);
+              }}
+            >
+              详情
+            </Button>
+            {Number(record.endTime) > dayjs().unix() && (
+              <>
+                <Button
+                  type="text"
+                  onClick={() => {
+                    history.push(`/meeting?id=${record.id}`);
+                  }}
+                >
+                  修改
+                </Button>
+                <Button
+                  type="text"
+                  onClick={() => {
+                    history.push(`/meeting-list/detail?id=${record.id}`);
+                  }}
+                >
+                  删除
+                </Button>
+              </>
+            )}
+          </>
+        );
+      },
     },
   ];
 

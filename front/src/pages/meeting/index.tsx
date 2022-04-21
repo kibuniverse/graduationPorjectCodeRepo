@@ -13,15 +13,33 @@ import _ from 'lodash';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
-import { getUserId, post, ResponseStatus } from '../../utils';
+import { get, getUserId, post, ResponseStatus } from '../../utils';
 import { meetingApi } from '../../utils/api';
 import { MeetingInfo } from '../meeting-list/type';
+import getUrlParams from '../../utils/getUrlParams';
 
 const FormItem = Form.Item;
 
 export default function Meeting() {
   const [form] = Form.useForm();
   const history = useHistory();
+  const { id } = getUrlParams();
+
+  // 增加默认值
+  React.useEffect(() => {
+    if (id) {
+      get<any>(meetingApi.getMeetingDetail.url, { id }).then((res) => {
+        const { data } = res;
+        const initialData = {
+          ...data,
+          beginTime: dayjs.unix(data.beginTime * 1000).unix(),
+          endTime: dayjs.unix(data.endTime * 1000).unix(),
+        };
+        form.setFieldsValue({ ...initialData });
+      });
+    }
+  }, []);
+
   const handleSubmit = _.throttle((v) => {
     const beginTime = String(dayjs(v.beginTime).unix());
     const endTime = String(dayjs(v.endTime).unix());
@@ -37,11 +55,23 @@ export default function Meeting() {
       beginTime,
       endTime,
     };
-
-    post<MeetingInfo>({ url: meetingApi.createMeeting.url, data: param }).then((res) => {
+    let url = '';
+    if (id) {
+      param.id = id;
+      url = meetingApi.updateMeeting.url;
+    } else {
+      url = meetingApi.createMeeting.url;
+    }
+    post<MeetingInfo>({ url, data: param }).then((res) => {
       if (res.status === ResponseStatus.success) {
-        Message.success('创建成功');
-        history.push(`/meeting-list/detail?id=${res.data.id}`);
+        if (id) {
+          Message.success('更新成功');
+        } else {
+          Message.success('创建成功');
+        }
+        const meetingId = res.data.id || id;
+
+        history.push(`/meeting-list/detail?id=${meetingId}`);
       }
     });
   }, 2000);
@@ -54,12 +84,7 @@ export default function Meeting() {
       </div>
       <div className={styles.content}>
         <Card>
-          <Form
-            form={form}
-            style={{ width: 600 }}
-            initialValues={{ name: 'admin' }}
-            onSubmit={handleSubmit}
-          >
+          <Form form={form} style={{ width: 600 }} onSubmit={handleSubmit}>
             <FormItem
               label="会议主题"
               field="title"
@@ -86,7 +111,7 @@ export default function Meeting() {
               field="maxCapacity"
               rules={[{ required: true }, { max: 30 }]}
             >
-              <InputNumber />
+              <InputNumber style={{ width: '100px' }} />
             </FormItem>
             <FormItem
               wrapperCol={{
@@ -94,7 +119,7 @@ export default function Meeting() {
               }}
             >
               <Button type="primary" htmlType="submit" style={{ marginRight: 24 }}>
-                创建会议
+                {id !== undefined ? '修改' : '创建'}
               </Button>
               <Button
                 style={{ marginRight: 24 }}

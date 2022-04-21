@@ -14,4 +14,5 @@ export const meetingApi = {
   createMeeting: Post(`/meeting`),
   getUserMeetingList: get(`/meeting/user-meeting-list?uid=${uid}`),
   getMeetingDetail: get(`/meeting/detail`),
+  updateMeeting: get('/meeting/update'),
 };
