@@ -20,6 +20,7 @@ export default function LoginForm() {
     } else {
       localStorage.removeItem('loginParams');
     }
+
     // 记录登录状态
     localStorage.setItem('userStatus', 'login');
     // 跳转首页
@@ -33,7 +34,9 @@ export default function LoginForm() {
     setLoading(true);
 
     axios
-      .post('http://127.0.0.1:3000/login/', params)
+      .post('http://127.0.0.1:3000/login/', params, {
+        headers: { withCredentials: true },
+      })
       .then((res) => {
         const { data: resData } = res;
         if (resData) {
@@ -41,10 +44,10 @@ export default function LoginForm() {
           if (status === 1) {
             window.localStorage.setItem('userInfo', JSON.stringify({ ...data }));
             window.localStorage.setItem('uid', data.id);
+            document.cookie = `userId=${data.id};domain=http://127.0.0.1:8081/`;
             afterLoginSuccess(params);
-          } else {
-            setErrorMessage(msg || '登录出错，请刷新重试');
           }
+          setErrorMessage(msg || '登录出错，请刷新重试');
         }
       })
       .finally(() => {
@@ -64,6 +67,7 @@ export default function LoginForm() {
           const { status, msg, data } = resData;
           if (status === 1) {
             window.localStorage.setItem('userInfo', JSON.stringify({ ...data }));
+
             afterLoginSuccess(params);
           } else {
             setErrorMessage(msg || '注册出错，请刷新重试');

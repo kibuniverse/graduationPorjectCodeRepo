@@ -39,7 +39,9 @@ let AppController = class AppController {
             resp.cookie('token', 'token', {
                 httpOnly: true,
                 expires: new Date(Date.now() + 3600 * 1000),
+                sameSite: 'none',
             });
+            resp.cookie('user', JSON.stringify(result));
             return (0, handleResponse_1.successResponse)(result, '登录成功');
         }
         else {

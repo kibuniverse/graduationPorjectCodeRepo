@@ -1,5 +1,11 @@
 import React from 'react';
-import { IconGift, IconUser, IconList, IconCalendarClock } from '@arco-design/web-react/icon';
+import {
+  IconGift,
+  IconUser,
+  IconList,
+  IconCalendarClock,
+  IconMessage,
+} from '@arco-design/web-react/icon';
 
 export const defaultRoute = 'welcome';
 
@@ -33,5 +39,11 @@ export const routes = [
     key: 'meeting-list',
     icon: <IconList />,
     componentPath: 'meeting-list',
+  },
+  {
+    name: '大厅',
+    key: 'living',
+    icon: <IconMessage />,
+    componentPath: 'living',
   },
 ];

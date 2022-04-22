@@ -19,7 +19,9 @@ export class AppController {
       resp.cookie('token', 'token', {
         httpOnly: true,
         expires: new Date(Date.now() + 3600 * 1000),
+        sameSite: 'none',
       });
+      resp.cookie('user', JSON.stringify(result));
       return successResponse(result, '登录成功');
     } else {
       return failResponse(res, '用户名或密码错误');

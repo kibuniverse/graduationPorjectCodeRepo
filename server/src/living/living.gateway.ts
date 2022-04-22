@@ -8,6 +8,10 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Repository } from 'typeorm';
+import { parseString2Obj } from 'src/utils/params';
 
 @WebSocketGateway({
   path: '/socket',
@@ -25,6 +29,11 @@ export class LivingGateway
   private connectCounts = 0; // 当前在线人数
   private allNum = 0; // 全部在线人数
   private users: any = {}; // 人数信息
+  private uidList = [];
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
 
   /**
    * 初始化
@@ -36,27 +45,51 @@ export class LivingGateway
   /**
    * 链接成功
    */
-  handleConnection(client: Socket) {
+  async handleConnection(client: Socket) {
     const cookie = client.request.headers.cookie;
-    console.log('id', cookie);
+    if (!cookie) {
+      return;
+    }
+    const { uid } = parseString2Obj(cookie);
+    if (this.uidList.includes(uid)) {
+      return;
+    }
+    this.uidList.push(uid);
+    console.log('receiver', uid);
+
+    const user = await this.userRepository.findOne({
+      where: { id: Number(uid) },
+    });
+    this.uidList.push(uid);
     this.connectCounts += 1;
     this.allNum += 1;
-    this.users[client.id] = `user-${this.connectCounts}`;
+    this.users[client.id] = user;
     this.ws.emit('enter', {
-      name: this.users[client.id],
+      userInfo: this.users[client.id],
       allNum: this.allNum,
       connectCounts: this.connectCounts,
     });
-    client.emit('enterName', this.users[client.id]);
+    client.emit('enterName', user.username);
   }
 
   /**
    * 断开链接
    */
   handleDisconnect(client: Socket) {
+    const cookie = client.request.headers.cookie;
+    if (!cookie) {
+      return;
+    }
+    const { uid } = parseString2Obj(cookie);
+    console.log('handle disconnect', uid);
+
+    this.uidList = this.uidList.map((item) =>
+      item === uid ? undefined : item,
+    );
     this.allNum -= 1;
+    this.connectCounts -= 1;
     this.ws.emit('leave', {
-      name: this.users[client.id],
+      name: this.users[client.id]?.username,
       allNum: this.allNum,
       connectCounts: this.connectCounts,
     });
@@ -68,17 +101,8 @@ export class LivingGateway
    */
   handleMessage(client: Socket, data: any): void {
     this.ws.emit('message', {
-      name: this.users[client.id],
+      name: this.users[client.id].username,
       say: data,
     });
-  }
-
-  @SubscribeMessage('name')
-  /**
-   * 监听修改名称
-   */
-  handleName(client: Socket, data: any): void {
-    this.users[client.id] = data;
-    client.emit('name', this.users[client.id]);
   }
 }
