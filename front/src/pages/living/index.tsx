@@ -1,14 +1,26 @@
-import { Avatar, Input, Statistic, Comment, Card } from '@arco-design/web-react';
+import { Avatar, Input, Comment, Card, List } from '@arco-design/web-react';
 import * as React from 'react';
 import io from 'socket.io-client';
+import { getUserName } from '../../utils';
 import styles from './index.module.less';
 
+const username = getUserName();
+
 export default function Living() {
-  const [list, setList] = React.useState<any[]>([]);
-  const [inputValue, setInputValue] = React.useState('');
-  const [online, setOnline] = React.useState(0);
+  const [infoList, setInfoList] = React.useState<any[]>([]);
+  const [onlineUidList, setOnlineUidList] = React.useState<string[]>([]);
+  const [users, setUsers] = React.useState<Record<string, Record<string, string | number>>>({});
+  const onLineUserInfoList = React.useMemo(() => {
+    const existUserList = onlineUidList.filter((uid) => users[uid]);
+    const userList = existUserList.map((uid) => {
+      return {
+        uid,
+        username: users[uid].username,
+      };
+    });
+    return userList;
+  }, [users, onlineUidList]);
   const socket = React.useMemo(() => {
-    console.log('创建 socket 连接');
     const socketIo = io('ws://127.0.0.1:3000', {
       path: '/socket',
       withCredentials: true,
@@ -19,11 +31,9 @@ export default function Living() {
   React.useEffect(() => {
     socket.removeAllListeners();
     socket.on('enter', enterRoom);
-    // socket.on('enterName', enterNameRoom);
     socket.on('message', messageRoom);
-    // socket.on('name', nameRoom);
     socket.on('leave', leaveRoom);
-  }, [socket, list]);
+  }, [socket, infoList]);
 
   React.useEffect(() => {
     return () => {
@@ -31,17 +41,17 @@ export default function Living() {
     };
   }, []);
 
-  const name = 'yankaizhi';
   /**
    * 进入
    */
-  function enterRoom(data) {
-    console.log('enter data', data);
-    setOnline(data.connectCounts);
-    setList(
-      list.concat({
+  function enterRoom(data: { uid: string; users: Record<string, any>; onlineUidList: string[] }) {
+    const { uid, users, onlineUidList } = data;
+    setOnlineUidList(onlineUidList);
+    setUsers(users);
+    setInfoList(
+      infoList.concat({
         type: 'enter',
-        name: data.userInfo.username,
+        name: users[uid].username,
       })
     );
   }
@@ -49,13 +59,13 @@ export default function Living() {
   /**
    * 接收消息
    */
-  function messageRoom(data) {
-    console.log('receive data', data);
-    setList(
-      list.concat({
+  function messageRoom(data: { uid: string; msg: string }) {
+    const { uid, msg } = data;
+    setInfoList(
+      infoList.concat({
         type: 'message',
-        say: data.say,
-        name: data.name,
+        msg,
+        name: users?.[uid].username || 'unknown users',
       })
     );
   }
@@ -63,23 +73,20 @@ export default function Living() {
   /**
    * 离开
    */
-  function leaveRoom(data) {
-    setList(
-      list.concat({
+  function leaveRoom(data: { uid: string }) {
+    const { uid } = data;
+    setOnlineUidList((list) => list.filter((item) => item !== uid));
+    setInfoList(
+      infoList.concat({
         type: 'leave',
-        name: data.name,
+        name: users[uid].username,
       })
     );
   }
 
-  const sentChange = (value) => {
-    setInputValue(value);
-  };
-
   const onSearch = (value) => {
     if (value) {
       socket.emit('message', value);
-      setInputValue('');
     }
   };
 
@@ -87,13 +94,23 @@ export default function Living() {
     <div>
       <div className="Home">
         <Card title="在线大厅">
-          <Statistic
-            style={{ padding: '10px 20px', display: 'inline-block' }}
-            title="Online Users"
-            value={online}
-          />
+          <div className={styles.onlineUsers}>
+            <List
+              dataSource={onLineUserInfoList}
+              render={(item, index) => {
+                return (
+                  <List.Item key={index}>
+                    <List.Item.Meta
+                      avatar={<Avatar shape="square">{item.username}</Avatar>}
+                      title={item.username}
+                    />
+                  </List.Item>
+                );
+              }}
+            />
+          </div>
           <div className={styles.chatContent}>
-            {list.map((value, index) => {
+            {infoList.map((value, index) => {
               if (value.type === 'enter') {
                 return (
                   <div className="home-enter" key={index}>
@@ -101,18 +118,18 @@ export default function Living() {
                   </div>
                 );
               }
-              if (value.type === 'message' && value.name !== name) {
+              if (value.type === 'message' && value.name !== username) {
                 return (
                   <Comment
                     style={{ padding: '0 20px' }}
                     key={index}
                     author={<span>{value.name}</span>}
                     avatar={<Avatar style={{ backgroundColor: '#87d068' }}>{value.name}</Avatar>}
-                    content={<p>{value.say}</p>}
+                    content={<p>{value.msg}</p>}
                   />
                 );
               }
-              if (value.type === 'message' && value.name === name) {
+              if (value.type === 'message' && value.name === username) {
                 return (
                   <div className="ant-comment" style={{ padding: '0px 20px' }} key={index}>
                     <div className="ant-comment-inner">
@@ -129,7 +146,7 @@ export default function Living() {
                           </span>
                         </div>
                         <div className="ant-comment-content-detail">
-                          <p style={{ textAlign: 'right' }}>{value.say}</p>
+                          <p style={{ textAlign: 'right' }}>{value.msg}</p>
                         </div>
                       </div>
                       <div className="ant-comment-avatar" style={{ margin: '0 0 0 12px' }}>
@@ -149,13 +166,7 @@ export default function Living() {
             })}
           </div>
           <div className="input-wrap">
-            <Input.Search
-              value={inputValue}
-              onChange={sentChange}
-              className="sentInput"
-              defaultValue="发送"
-              onSearch={onSearch}
-            />
+            <Input.Search className="sentInput" onSearch={onSearch} />
           </div>
         </Card>
       </div>

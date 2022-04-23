@@ -73,7 +73,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
-    "socket.io-client": "^4.4.1"
+    "socket.io-client": "^4.4.1",
+    "trtc-js-sdk": "^4.12.3"
   },
   "husky": {
     "hooks": {

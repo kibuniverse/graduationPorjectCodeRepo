@@ -5,6 +5,7 @@ import {
   IconList,
   IconCalendarClock,
   IconMessage,
+  IconVideoCamera,
 } from '@arco-design/web-react/icon';
 
 export const defaultRoute = 'welcome';
@@ -45,5 +46,11 @@ export const routes = [
     key: 'living',
     icon: <IconMessage />,
     componentPath: 'living',
+  },
+  {
+    name: '视频会议',
+    key: 'living-meeting',
+    icon: <IconVideoCamera />,
+    componentPath: 'living-meeting',
   },
 ];
