@@ -23,6 +23,7 @@ export class MeetingController {
 
   @Get('/user-meeting-list')
   async meetingList(@Query('uid') uid) {
+    console.log(`查询 uid: ${uid} 的会议列表`);
     return await this.meetingService.findOne(uid);
   }
 

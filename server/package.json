@@ -34,6 +34,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cookie-parser": "^1.4.6",
+    "crypto": "^1.0.1",
     "dayjs": "^1.11.1",
     "mysql": "^2.18.1",
     "passport": "^0.5.2",
@@ -44,7 +45,8 @@
     "socket.io": "^4.4.1",
     "swagger-ui-express": "^4.3.0",
     "typeorm": "^0.3.4",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

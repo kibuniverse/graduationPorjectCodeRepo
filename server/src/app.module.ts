@@ -8,7 +8,9 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { UsersService } from './users/users.service';
 import { MeetingModule } from './meeting/meeting.module';
 import { Meeting } from './meeting/entities/meeting.entity';
+import { ChatModule } from './chat/chat.module';
 import { LivingModule } from './living/living.module';
+import { LivingInfoModule } from './living-info/livingInfo.module';
 
 @Module({
   imports: [
@@ -25,7 +27,9 @@ import { LivingModule } from './living/living.module';
     TypeOrmModule.forFeature([User]),
     UsersModule,
     MeetingModule,
+    ChatModule,
     LivingModule,
+    LivingInfoModule,
   ],
   controllers: [AppController],
   providers: [AppService, UsersService],

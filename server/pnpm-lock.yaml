@@ -24,6 +24,7 @@ specifiers:
   class-transformer: ^0.5.1
   class-validator: ^0.13.2
   cookie-parser: ^1.4.6
+  crypto: ^1.0.1
   dayjs: ^1.11.1
   eslint: ^8.0.1
   eslint-config-prettier: ^8.3.0
@@ -47,6 +48,7 @@ specifiers:
   typeorm: ^0.3.4
   typescript: ^4.3.5
   uuid: ^8.3.2
+  zlib: ^1.0.5
 
 dependencies:
   '@nestjs/common': 8.4.2_5199533202e21c7185c9d97f881e2827
@@ -62,6 +64,7 @@ dependencies:
   class-transformer: 0.5.1
   class-validator: 0.13.2
   cookie-parser: 1.4.6
+  crypto: 1.0.1
   dayjs: 1.11.1
   mysql: 2.18.1
   passport: 0.5.2
@@ -73,6 +76,7 @@ dependencies:
   swagger-ui-express: 4.3.0
   typeorm: 0.3.4_ts-node@10.7.0
   uuid: 8.3.2
+  zlib: 1.0.5
 
 devDependencies:
   '@nestjs/cli': 8.2.4
@@ -2299,6 +2303,11 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /crypto/1.0.1:
+    resolution: {integrity: sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==}
+    deprecated: This package is no longer supported. It's now a built-in Node module. If you've depended on crypto, you should switch to the one that's built-in.
+    dev: false
 
   /cssom/0.3.8:
     resolution: {integrity: sha512-b0tGHbfegbhPJpxpiBPU2sCkigAqtM9O121le6bbOlgyV+NyGyCmVfJ6QW9eRjz8CpNfWEOYBIMIGRYkLwsIYg==}
@@ -5836,3 +5845,8 @@ packages:
     resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
     engines: {node: '>=6'}
     dev: true
+
+  /zlib/1.0.5:
+    resolution: {integrity: sha1-bnyXL8NxxkWmr7A6sUdp3vEU/MA=}
+    engines: {node: '>=0.2.0'}
+    dev: false
