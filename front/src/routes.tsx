@@ -43,14 +43,15 @@ export const routes = [
   },
   {
     name: '大厅',
-    key: 'living',
+    key: 'chat',
     icon: <IconMessage />,
-    componentPath: 'living',
+    componentPath: 'chat',
   },
   {
     name: '视频会议',
-    key: 'living-meeting',
+    key: 'living',
     icon: <IconVideoCamera />,
-    componentPath: 'living-meeting',
+    notInMenu: true,
+    componentPath: 'living',
   },
 ];

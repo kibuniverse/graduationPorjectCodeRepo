@@ -43,7 +43,7 @@ export default function MeetingList() {
     {
       title: '结束时间',
       dataIndex: 'endTime',
-      render: (text: string) => dayjs(Number(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
+      render: (text: string) => dayjs(Number(text) * 1000).format('YYYY-MM-DD HH:mms:ss'),
     },
     {
       title: '最大人数限制',

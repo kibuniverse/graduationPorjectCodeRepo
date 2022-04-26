@@ -8,3 +8,6 @@ export function isObject(val: any): boolean {
 export function isString(val: any): boolean {
   return Object.prototype.toString.call(val) === '[object String]';
 }
+export function isUndefined(val: any): boolean {
+  return typeof val === 'undefined';
+}
