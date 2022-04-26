@@ -50,4 +50,15 @@ export class UsersService {
   remove(id: number) {
     return this.userRepository.delete({ id });
   }
+
+  async changePsd(data: { uid: number; oldPsd: string; newPsd: string }) {
+    const { uid, oldPsd, newPsd } = data;
+    const user = await this.userRepository.findOne({ where: { id: uid } });
+    console.log(user);
+    if (user.password !== oldPsd) {
+      return HandleResp.failResponse({}, '原密码错误');
+    }
+    this.userRepository.update(uid, { password: newPsd });
+    return HandleResp.successResponse({}, '更新成功');
+  }
 }

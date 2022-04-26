@@ -19,4 +19,13 @@ export declare class UsersService {
     findOne(id: number): Promise<User>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<import("typeorm").UpdateResult>;
     remove(id: number): Promise<import("typeorm").DeleteResult>;
+    changePsd(data: {
+        uid: number;
+        oldPsd: string;
+        newPsd: string;
+    }): Promise<{
+        data: any;
+        msg: string;
+        status: number;
+    }>;
 }

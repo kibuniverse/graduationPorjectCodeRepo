@@ -50,7 +50,43 @@ export class MeetingService {
         createUserId: id,
       },
     });
+    console.log(meeting);
+    meeting.sort(
+      (item1, item2) => Number(item2.beginTime) - Number(item1.beginTime),
+    );
     return HandleResp.successResponse(meeting);
+  }
+
+  async findMeetingList(id: number) {
+    const meeting = await this.meetingRepository.find({
+      where: {
+        createUserId: id,
+      },
+    });
+    console.log(meeting);
+    const finishMeetingList = meeting.filter((item) => {
+      return Number(item.endTime) * 1000 < Date.now();
+    });
+    const notBeginMeetingList = meeting.filter((item) => {
+      return Number(item.beginTime) * 1000 > Date.now();
+    });
+    const inProgressMeetingList = meeting.filter((item) => {
+      return (
+        Number(item.beginTime) * 1000 < Date.now() &&
+        Number(item.endTime) * 1000 > Date.now()
+      );
+    });
+    inProgressMeetingList.sort(
+      (item1, item2) => Number(item2.beginTime) - Number(item1.beginTime),
+    );
+    notBeginMeetingList.sort(
+      (item1, item2) => Number(item2.beginTime) - Number(item1.beginTime),
+    );
+    return HandleResp.successResponse([
+      ...inProgressMeetingList,
+      ...notBeginMeetingList,
+      ...finishMeetingList,
+    ]);
   }
 
   async getMeetingDetailByRoomId(roomId: string) {

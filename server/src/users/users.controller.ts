@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,6 +26,18 @@ export class UsersController {
   @Get('/name/:userName')
   async findUserInfoByUsername(@Param('userName') userName: string) {
     return await this.usersService.findByUsername(userName);
+  }
+
+  @Get('/userInfo/:uid')
+  async getUserInfo(@Param('uid') uid: string) {
+    return await this.usersService.findOne(+uid);
+  }
+
+  @Post('/changePsd')
+  async changePsd(
+    @Body() data: { uid: number; oldPsd: string; newPsd: string },
+  ) {
+    return await this.usersService.changePsd(data);
   }
 
   @Get()

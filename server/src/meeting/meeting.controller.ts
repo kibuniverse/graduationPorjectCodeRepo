@@ -24,7 +24,7 @@ export class MeetingController {
   @Get('/user-meeting-list')
   async meetingList(@Query('uid') uid) {
     console.log(`查询 uid: ${uid} 的会议列表`);
-    return await this.meetingService.findOne(uid);
+    return await this.meetingService.findMeetingList(uid);
   }
 
   @Get('/detail')
@@ -34,7 +34,6 @@ export class MeetingController {
 
   @Get('/detailByRoomId/:roomId')
   async getMeetingDetailByRoomId(@Param('roomId') roomId: string) {
-    console.log('roomroomId', roomId);
     return await this.meetingService.getMeetingDetailByRoomId(roomId);
   }
 

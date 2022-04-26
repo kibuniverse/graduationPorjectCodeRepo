@@ -53,6 +53,16 @@ let UsersService = class UsersService {
     remove(id) {
         return this.userRepository.delete({ id });
     }
+    async changePsd(data) {
+        const { uid, oldPsd, newPsd } = data;
+        const user = await this.userRepository.findOne({ where: { id: uid } });
+        console.log(user);
+        if (user.password !== oldPsd) {
+            return utils_1.HandleResp.failResponse({}, '原密码错误');
+        }
+        this.userRepository.update(uid, { password: newPsd });
+        return utils_1.HandleResp.successResponse({}, '更新成功');
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),
