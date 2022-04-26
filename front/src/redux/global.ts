@@ -1,3 +1,4 @@
+import { UserInfo } from '../pages/meeting-list/type';
 import defaultSettings from '../settings.json';
 
 const defaultTheme = localStorage.getItem('arco-theme') || 'light';
@@ -16,14 +17,7 @@ changeTheme();
 export interface GlobalState {
   theme?: string;
   settings?: typeof defaultSettings;
-  userInfo?: {
-    name?: string;
-    avatar?: string;
-    job?: string;
-    organization?: string;
-    location?: string;
-    email?: string;
-  };
+  userInfo?: UserInfo;
 }
 
 const initialState: GlobalState = {

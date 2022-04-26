@@ -23,4 +23,5 @@ export const meetingApi = {
 export const userApi = {
   getUserInfo: (uid) => get(`/user/info/${uid}`),
   getUserInfoByUsername: (username: string) => get(`/users/name/${username}`),
+  changePsd: Post('/users/changePsd'),
 };

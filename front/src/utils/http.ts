@@ -6,6 +6,7 @@ export async function get<T>(url, params = {}) {
     axios
       .get(url, {
         params,
+        withCredentials: true,
       })
       .then((res) => {
         resolve(res.data);

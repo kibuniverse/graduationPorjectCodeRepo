@@ -16,6 +16,7 @@ import './style/index.less';
 import './mock';
 import Login from './pages/login';
 import checkLogin from './utils/checkLogin';
+import { getUserId } from './utils';
 
 const store = createStore(rootReducer);
 
@@ -45,12 +46,16 @@ function Index() {
   }
 
   function fetchUserInfo() {
-    axios.get('/api/user/userInfo').then((res) => {
-      store.dispatch({
-        type: 'update-userInfo',
-        payload: { userInfo: res.data },
+    const uid = getUserId();
+
+    axios
+      .get(`http://127.0.0.1:3000/users/userInfo/${uid}`, { withCredentials: true })
+      .then((res) => {
+        store.dispatch({
+          type: 'update-userInfo',
+          payload: { userInfo: res.data },
+        });
       });
-    });
   }
 
   useEffect(() => {

@@ -16,7 +16,8 @@ import _ from 'lodash';
 import * as React from 'react';
 import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
-import { get, getUserId, getUserName } from '../../utils';
+import dayjs from 'dayjs';
+import { canJoinByTime, get, getUserId, getUserName } from '../../utils';
 import useLocale from '../../utils/useLocale';
 import styles from './style/index.module.less';
 import { meetingApi, userApi } from '../../utils/api';
@@ -73,20 +74,21 @@ export default function Welcome() {
     if (queryRoomInfo) {
       return [
         {
-          label: '会议主题',
-          value: queryRoomInfo.title,
-        },
-        {
           label: '会议id',
           value: queryRoomInfo.id,
         },
         {
+          label: '会议主题',
+          value: queryRoomInfo.title,
+        },
+
+        {
           label: '开始时间',
-          value: queryRoomInfo.beginTime,
+          value: dayjs(Number(queryRoomInfo?.beginTime) * 1000).format('YYYY-MM-DD HH:mm:ss'),
         },
         {
           label: '结束时间',
-          value: queryRoomInfo.endTime,
+          value: dayjs(Number(queryRoomInfo?.endTime) * 1000).format('YYYY-MM-DD HH:mm:ss'),
         },
       ];
     }
@@ -115,7 +117,9 @@ export default function Welcome() {
     get<MeetingInfo>(meetingApi.getMeetingDetailByRoomId(roomId).url).then((res) => {
       if (res.data) {
         Message.success('查询成功');
+        console.log(res.data);
         setQueryRoomInfo(res.data);
+        setRoomVisible(true);
       } else {
         Message.warning('未查询到该房间信息');
       }
@@ -296,22 +300,14 @@ export default function Welcome() {
         {queryRoomInfo && (
           <>
             <Descriptions title="房间信息" column={1} data={queryRoomInfoDescribe} />
-            {getUserStatus(queryUserInfo.id) === '会议中' && (
+            {canJoinByTime(queryRoomInfo) && (
               <Button
                 type="primary"
                 onClick={() => {
-                  const meetingUserIndex = meetingUserList.findIndex(
-                    (item) => item.id === queryUserInfo.id
-                  );
-                  if (meetingUserIndex > -1) {
-                    const roomId = meetingUserList[meetingUserIndex].roomId;
-                    console.log('准备加入', roomId);
-                    socket.emit('leave', { uid, type: 'free' });
-                    history.push(`/living?roomId=${roomId}&autoJoin=1`);
-                  }
+                  history.push(`/living?roomId=${queryRoomInfo.roomId}&autoJoin=1`);
                 }}
               >
-                加入该房间
+                加入会议
               </Button>
             )}
           </>

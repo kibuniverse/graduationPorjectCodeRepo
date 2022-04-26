@@ -16,8 +16,6 @@ import useLocale from '../../utils/useLocale';
 import Logo from '../../assets/logo.svg';
 import history from '../../history';
 
-import MessageBox from '../MessageBox';
-
 import styles from './style/index.module.less';
 
 function Navbar() {
@@ -49,12 +47,12 @@ function Navbar() {
         </Space>
       </div>
       <ul className={styles.right}>
-        <li>
+        {/* <li>
           <MessageBox />
         </li>
         <li>
           <a>{locale['navbar.docs']}</a>
-        </li>
+        </li> */}
         <li>
           <Select
             options={[
@@ -98,7 +96,7 @@ function Navbar() {
         {userInfo && (
           <li>
             <Avatar size={24} style={{ marginRight: 8 }}>
-              <img alt="avatar" src={userInfo.avatar} />
+              {userInfo.username}
             </Avatar>
             <Dropdown
               trigger="click"
@@ -108,7 +106,7 @@ function Navbar() {
                 </Menu>
               }
             >
-              <Typography.Text className={styles.username}>{userInfo.name}</Typography.Text>
+              <Typography.Text className={styles.username}>{userInfo.username}</Typography.Text>
             </Dropdown>
           </li>
         )}
