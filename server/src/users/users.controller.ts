@@ -22,6 +22,11 @@ export class UsersController {
     return await this.usersService.create(createUserDto);
   }
 
+  @Get('/name/:userName')
+  async findUserInfoByUsername(@Param('userName') userName: string) {
+    return await this.usersService.findByUsername(userName);
+  }
+
   @Get()
   async findAll() {
     const res = await this.usersService.findAll();
@@ -31,7 +36,6 @@ export class UsersController {
       return failResponse(res);
     }
   }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);

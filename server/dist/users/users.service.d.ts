@@ -10,6 +10,11 @@ export declare class UsersService {
         msg: string;
         status: number;
     }>;
+    findByUsername(username: string): Promise<{
+        data: any;
+        msg: string;
+        status: number;
+    }>;
     findAll(): Promise<User[]>;
     findOne(id: number): Promise<User>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<import("typeorm").UpdateResult>;

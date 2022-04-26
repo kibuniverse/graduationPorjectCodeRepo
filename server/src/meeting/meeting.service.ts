@@ -53,6 +53,14 @@ export class MeetingService {
     return HandleResp.successResponse(meeting);
   }
 
+  async getMeetingDetailByRoomId(roomId: string) {
+    const meetingInfo = await this.meetingRepository.findOne({
+      where: { roomId },
+    });
+    console.log(meetingInfo);
+    return HandleResp.successResponse(meetingInfo);
+  }
+
   async update(updateMeetingDto: UpdateMeetingDto) {
     const res = await this.meetingRepository.update(
       { id: updateMeetingDto.id },

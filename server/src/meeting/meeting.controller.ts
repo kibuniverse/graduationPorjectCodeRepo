@@ -32,6 +32,12 @@ export class MeetingController {
     return await this.meetingService.getMeetingDetailByMeetingId(Number(id));
   }
 
+  @Get('/detailByRoomId/:roomId')
+  async getMeetingDetailByRoomId(@Param('roomId') roomId: string) {
+    console.log('roomroomId', roomId);
+    return await this.meetingService.getMeetingDetailByRoomId(roomId);
+  }
+
   @Get()
   findAll() {
     return this.meetingService.findAll();

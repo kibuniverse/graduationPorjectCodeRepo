@@ -11,8 +11,6 @@ import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { params } from 'src/utils';
-import { Api } from 'src/utils/trtc-gen-sig';
 import { Meeting } from 'src/meeting/entities/meeting.entity';
 
 @WebSocketGateway({
@@ -63,31 +61,31 @@ export class LivingInfoGateway
    */
   @SubscribeMessage('leave')
   async handleLeave(client: Socket, data: any) {
-    const { uid } = data;
-    const realUid = Number(uid);
-    console.log(this.freeUserList, realUid);
-    this.freeUserList = this.freeUserList.filter((item) => item.id != realUid);
-    this.meetingUserList.forEach((item) => {
-      if (item.id === realUid) {
-        const roomIndex = this.roomList.findIndex(
-          (roomItem) => roomItem.roomId === item.roomId,
+    const { uid, roomId, type } = data;
+    console.log('data', data);
+    switch (type) {
+      case 'free':
+        this.freeUserList = this.freeUserList.filter(
+          (item) => item.id !== Number(uid),
         );
-        console.log('roomIndex', roomIndex);
+        break;
+      case 'meeting':
+        this.meetingUserList = this.meetingUserList.filter(
+          (item) => item.id !== Number(uid),
+        );
+        const roomIndex = this.roomList.findIndex(
+          (item) => item.roomId === Number(roomId),
+        );
         if (roomIndex >= 0) {
-          this.roomList[roomIndex].onlineUserList = this.roomList[
-            roomIndex
-          ].onlineUserList.filter((item) => item.id != realUid);
-          this.roomList = this.roomList.filter(
-            (item) => item.onlineUserList.length > 0,
-          );
+          this.roomList[roomIndex].onlineUserList =
+            this.roomList[roomIndex].onlineUserList.filter(
+              (item) => item.id !== Number(uid),
+            ) || [];
+          if (this.roomList[roomIndex].onlineUserList.length === 0) {
+            this.roomList.splice(roomIndex, 1);
+          }
         }
-      }
-    });
-
-    this.meetingUserList = this.meetingUserList.filter(
-      (item) => item.id != realUid,
-    );
-
+    }
     this.ws.emit('enter', {
       type: 'leave',
       freeUserList: this.freeUserList,
@@ -120,7 +118,7 @@ export class LivingInfoGateway
         }
         this.meetingUserList.push({ ...user, roomId: Number(roomId) });
         const roomIndex = this.roomList.findIndex(
-          (item) => item.roomId === roomId,
+          (item) => item.roomId === Number(roomId),
         );
         if (roomIndex >= 0) {
           this.roomList[roomIndex].onlineUserList.push(user);

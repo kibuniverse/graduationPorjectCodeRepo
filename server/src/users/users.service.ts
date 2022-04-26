@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { HandleResp } from 'src/utils';
 import { failResponse, successResponse } from 'src/utils/handleResponse';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,6 +26,13 @@ export class UsersService {
 
     const res = await this.userRepository.save(createUserDto);
     return successResponse(res, '注册成功');
+  }
+
+  async findByUsername(username: string) {
+    const user = await this.userRepository.findOne({ where: { username } });
+    if (user) {
+      return HandleResp.successResponse(user);
+    }
   }
 
   findAll() {
