@@ -30,15 +30,15 @@ AppModule = __decorate([
         imports: [
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'mysql',
-                host: 'localhost',
+                host: '127.0.0.1',
                 port: 3306,
                 username: 'root',
                 password: 'Yankaizhi123.',
                 database: 'seg',
                 entities: [user_entity_1.User, meeting_entity_1.Meeting],
-                synchronize: true,
+                synchronize: false,
             }),
-            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
+            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, meeting_entity_1.Meeting]),
             users_module_1.UsersModule,
             meeting_module_1.MeetingModule,
             chat_module_1.ChatModule,

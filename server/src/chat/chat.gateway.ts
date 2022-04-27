@@ -27,6 +27,7 @@ export class ChatGateway
   private logger: Logger = new Logger('ChatGateway');
   @WebSocketServer() private ws: Server; // socket实例
   private users: any = {}; // 人员信息
+  private roomSocket: Record<string, Socket[]> = {};
   private onlineUidList = [];
   constructor(
     @InjectRepository(User)
@@ -50,18 +51,29 @@ export class ChatGateway
       return;
     }
     this.onlineUidList.push(uid);
-    console.log('receiver', uid);
+  }
 
+  @SubscribeMessage('join')
+  async handleJoinRoom(client: Socket, data) {
+    const { uid } = params.parseCookieFromSocketClient(client);
     const user = await this.userRepository.findOne({
       where: { id: Number(uid) },
     });
-
     this.users[uid] = user;
-    this.ws.emit('enter', {
-      uid,
-      users: this.users,
-      onlineUidList: this.onlineUidList,
-    });
+    console.log(uid, user);
+    const { roomId } = data;
+    if (this.roomSocket[roomId]) {
+      this.roomSocket[roomId].push(client);
+      this.roomSocket[roomId].forEach((item) => {
+        item.emit('enter', {
+          uid,
+          users: this.users,
+          onlineUidList: this.onlineUidList,
+        });
+      });
+    } else {
+      this.roomSocket[roomId] = [client];
+    }
   }
 
   /**
@@ -70,9 +82,6 @@ export class ChatGateway
   handleDisconnect(client: Socket) {
     const { uid } = params.parseCookieFromSocketClient(client);
     this.onlineUidList = this.onlineUidList.filter((item) => item != uid);
-    this.ws.emit('leave', {
-      uid: uid,
-    });
   }
 
   /**
@@ -80,11 +89,14 @@ export class ChatGateway
    */
   @SubscribeMessage('message')
   handleMessage(client: Socket, data: any): void {
+    const { roomId, msg } = data;
     const { uid } = params.parseCookieFromSocketClient(client);
-    this.ws.emit('message', {
-      uid,
-      msg: data,
-      time: new Date().getTime(),
+    this.roomSocket[roomId].forEach((item) => {
+      item.emit('message', {
+        uid,
+        msg,
+        time: new Date().getTime(),
+      });
     });
   }
 }
