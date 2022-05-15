@@ -36,13 +36,16 @@ let AppController = class AppController {
         const res = await this.appService.login(loginDto);
         if (res) {
             const { password } = res, result = __rest(res, ["password"]);
-            resp.cookie('token', 'token', {
-                httpOnly: true,
-                expires: new Date(Date.now() + 3600 * 1000),
-                sameSite: 'none',
-            });
-            resp.cookie('user', JSON.stringify(result));
-            return (0, handleResponse_1.successResponse)(result, '登录成功');
+            if (password === loginDto.password) {
+                resp.cookie('token', 'token', {
+                    httpOnly: true,
+                    expires: new Date(Date.now() + 3600 * 24),
+                    sameSite: 'none',
+                });
+                resp.cookie('user', JSON.stringify(result));
+                return (0, handleResponse_1.successResponse)(result, '登录成功');
+            }
+            return (0, handleResponse_1.failResponse)(res, '用户名或密码错误');
         }
         else {
             return (0, handleResponse_1.failResponse)(res, '用户名或密码错误');

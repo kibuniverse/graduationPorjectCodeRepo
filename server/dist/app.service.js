@@ -25,7 +25,6 @@ let AppService = class AppService {
         return await this.UserRepository.findOne({
             where: {
                 username: loginDto.username,
-                password: loginDto.password,
                 isDelete: false,
             },
         });

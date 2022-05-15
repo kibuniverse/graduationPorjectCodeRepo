@@ -63,7 +63,6 @@ export class MeetingService {
         createUserId: id,
       },
     });
-    console.log(meeting);
     const finishMeetingList = meeting.filter((item) => {
       return Number(item.endTime) * 1000 < Date.now();
     });

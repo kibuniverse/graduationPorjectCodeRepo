@@ -2,5 +2,9 @@
   "editor.detectIndentation": false,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
-  "cSpell.words": ["Inno", "varchar"]
+  "cSpell.words": [
+    "Inno",
+    "varchar"
+  ],
+  "editor.tabSize": 4
 }

@@ -14,7 +14,7 @@ import { Repository } from 'typeorm';
 import { params } from 'src/utils';
 import { Api } from 'src/utils/trtc-gen-sig';
 @WebSocketGateway({
-  path: '/living',
+  path: '/chat',
   allowEIO3: true,
   cors: {
     origin: /.*/,
@@ -50,7 +50,6 @@ export class LivingGateway
       return;
     }
     this.onlineUidList.push(uid);
-    console.log('receiver', uid);
 
     const user = await this.userRepository.findOne({
       where: { id: Number(uid) },
@@ -62,13 +61,8 @@ export class LivingGateway
       users: this.users,
       onlineUidList: this.onlineUidList,
     });
-    const api = new Api(
-      1400667282,
-      '29cc5d85084d738b37faac08adafe84a4cecf71f766d58e1d9cd4d5f1bedb5b9',
-    );
-    const userSig = api.genUserSig(user.username, 604800);
 
-    client.emit('info', { username: user.username, userSig });
+    client.emit('info', { username: user.username });
   }
 
   /**
