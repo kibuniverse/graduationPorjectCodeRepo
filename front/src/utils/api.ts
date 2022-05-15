@@ -1,14 +1,16 @@
 import { getUserId } from './getUserInfo';
 
-export const ip = 'http://127.0.0.1:3000';
-
+export const protocol = 'http://';
+export const ip = '127.0.0.1';
+export const port = 3000;
+const uri = `${protocol}${ip}:${port}`;
 const Post = (path) => ({
   method: 'Post',
-  url: ip + path,
+  url: uri + path,
 });
 const get = (path) => ({
   method: 'get',
-  url: ip + path,
+  url: uri + path,
 });
 const uid = getUserId();
 
@@ -24,4 +26,8 @@ export const userApi = {
   getUserInfo: (uid) => get(`/user/info/${uid}`),
   getUserInfoByUsername: (username: string) => get(`/users/name/${username}`),
   changePsd: Post('/users/changePsd'),
+};
+
+export const loginApi = {
+  login: Post('/login'),
 };

@@ -1,24 +1,25 @@
 import * as React from 'react';
-import { Avatar, Input, Comment, Card, List } from '@arco-design/web-react';
+import { Avatar, Input, Comment, Card } from '@arco-design/web-react';
 import io from 'socket.io-client';
 import styles from './index.module.less';
+import { ip, port } from '../../utils/api';
 
 export default function Living() {
   const [infoList, setInfoList] = React.useState<any[]>([]);
-  const [onlineUidList, setOnlineUidList] = React.useState<string[]>([]);
+  // const [onlineUidList, setOnlineUidList] = React.useState<string[]>([]);
   const [users, setUsers] = React.useState<Record<string, Record<string, string | number>>>({});
-  const onLineUserInfoList = React.useMemo(() => {
-    const existUserList = onlineUidList.filter((uid) => users[uid]);
-    const userList = existUserList.map((uid) => {
-      return {
-        uid,
-        username: users[uid].username,
-      };
-    });
-    return userList;
-  }, [users, onlineUidList]);
+  // const onLineUserInfoList = React.useMemo(() => {
+  //   const existUserList = onlineUidList.filter((uid) => users[uid]);
+  //   const userList = existUserList.map((uid) => {
+  //     return {
+  //       uid,
+  //       username: users[uid].username,
+  //     };
+  //   });
+  //   return userList;
+  // }, [users, onlineUidList]);
   const socket = React.useMemo(() => {
-    const socketIo = io('ws://127.0.0.1:3000', {
+    const socketIo = io(`ws://${ip}:${port}`, {
       path: '/chat',
       withCredentials: true,
     });
@@ -41,9 +42,13 @@ export default function Living() {
   /**
    * 进入
    */
-  function enterRoom(data: { uid: string; users: Record<string, any>; onlineUidList: string[] }) {
-    const { uid, users, onlineUidList } = data;
-    setOnlineUidList(onlineUidList);
+  function enterRoom(data: {
+    uid: string;
+    users: Record<string, Record<string, string | number>>;
+    onlineUidList: string[];
+  }) {
+    const { uid, users } = data;
+    // setOnlineUidList(onlineUidList);
     setUsers(users);
     setInfoList(
       infoList.concat({
@@ -57,7 +62,6 @@ export default function Living() {
    * 接收消息
    */
   function messageRoom(data: { uid: string; msg: string }) {
-    console.log('接收到消息', data);
     const { uid, msg } = data;
     setInfoList(
       infoList.concat({
@@ -73,7 +77,7 @@ export default function Living() {
    */
   function leaveRoom(data: { uid: string }) {
     const { uid } = data;
-    setOnlineUidList((list) => list.filter((item) => item !== uid));
+    // setOnlineUidList((list) => list.filter((item) => item !== uid));
     setInfoList(
       infoList.concat({
         type: 'leave',
@@ -92,7 +96,7 @@ export default function Living() {
     <div>
       <div className="Home">
         <Card title="在线大厅">
-          <div className={styles.onlineUsers}>
+          {/* <div className={styles.onlineUsers}>
             <List
               dataSource={onLineUserInfoList}
               render={(item, index) => {
@@ -106,7 +110,7 @@ export default function Living() {
                 );
               }}
             />
-          </div>
+          </div> */}
           <div className={styles.chatContent}>
             {infoList.map((value, index) => {
               if (value.type === 'enter') {

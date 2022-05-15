@@ -20,7 +20,7 @@ export async function get<T>(url, params = {}) {
 export async function post<T>({ url, data }) {
   return new Promise<Response<T>>((resolve, reject) => {
     axios
-      .post(url, data)
+      .post(url, data, { withCredentials: true })
       .then((res) => {
         resolve(res.data);
       })

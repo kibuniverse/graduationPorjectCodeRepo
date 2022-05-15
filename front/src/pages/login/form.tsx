@@ -5,6 +5,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import styles from './style/index.module.less';
 import history from '../../history';
+import { post, ResponseStatus } from '../../utils';
+import { loginApi } from '../../utils/api';
+import { UserInfo } from '../meeting-list/type';
 
 export default function LoginForm() {
   const formRef = useRef<FormInstance>();
@@ -33,17 +36,13 @@ export default function LoginForm() {
     setErrorMessage('');
     setLoading(true);
 
-    axios
-      .post('http://127.0.0.1:3000/login/', params, {
-        headers: { withCredentials: true },
-      })
+    post<UserInfo>({ url: loginApi.login.url, data: params })
       .then((res) => {
-        const { data: resData } = res;
-        if (resData) {
-          const { status, msg, data } = resData;
-          if (status === 1) {
+        if (res) {
+          const { status, msg, data } = res;
+          if (status === ResponseStatus.success) {
             window.localStorage.setItem('userInfo', JSON.stringify({ ...data }));
-            window.localStorage.setItem('uid', data.id);
+            window.localStorage.setItem('uid', String(data.id));
             document.cookie = `userId=${data.id};domain=http://127.0.0.1:8081/`;
             afterLoginSuccess(params);
           }

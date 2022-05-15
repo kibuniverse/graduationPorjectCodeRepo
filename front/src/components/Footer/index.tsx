@@ -10,7 +10,7 @@ export default (props: FooterProps = {}) => {
   const { className, ...restProps } = props;
   return (
     <Footer className={cs(styles.footer, className)} {...restProps}>
-      CEG 会议系统 ©2020 Created by yankaizhi
+      CEG 会议系统 ©2022 Created by yankaizhi
     </Footer>
   );
 };
