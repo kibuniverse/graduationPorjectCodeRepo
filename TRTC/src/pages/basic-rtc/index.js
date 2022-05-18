@@ -504,12 +504,12 @@ export default function BasicRtc(props) {
           </div>
         </div>
         {/* 生成二维码 */}
-        {!isMobile && ENV_IS_PRODUCTION && (
+        {/* {!isMobile && ENV_IS_PRODUCTION && (
           <div className={clsx(styles["footer-container"])}>
             {mountFlag && <Typography>{a18n("移动端体验")}</Typography>}
             <QRCoder roomID={roomID}></QRCoder>
           </div>
-        )}
+        )} */}
       </div>
       {/* 视频流显示区域 */}
       <div className={styles["stream-container"]}>

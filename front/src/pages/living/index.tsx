@@ -11,7 +11,7 @@ const LivingMeeting = () => {
     userId: username,
     autoJoin,
   };
-  const src = addObj2Url('http://124.221.148.30:3001/basic-rtc', param);
+  const src = addObj2Url('http://127.0.0.1:3001/basic-rtc', param);
   const uid = getUserId();
   const socket = React.useMemo(() => {
     const socketIo = io('ws://kizy.cc:3000', {
