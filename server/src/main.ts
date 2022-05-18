@@ -8,7 +8,7 @@ import { HandleExceptionFilter } from './handle-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.setGlobalPrefix('api');
   // 拦截器，统一输出
   app.useGlobalInterceptors(new RespInterceptor());
   // 数据验证
