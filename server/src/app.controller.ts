@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { AppService } from './app.service';
 import { LoginDto } from './users/dto/login.dto';
@@ -7,6 +7,11 @@ import { failResponse, successResponse } from './utils/handleResponse';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
+
+  @Get('hello')
+  hello() {
+    return 'hello world';
+  }
 
   @Post('/login')
   async login(

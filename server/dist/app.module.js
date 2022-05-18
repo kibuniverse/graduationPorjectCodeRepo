@@ -29,12 +29,12 @@ AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forRoot({
-                type: 'mysql',
-                host: '127.0.0.1',
+                type: "mariadb",
+                host: 'localhost',
                 port: 3306,
                 username: 'root',
                 password: 'Yankaizhi123.',
-                database: 'seg',
+                database: 'ceg',
                 entities: [user_entity_1.User, meeting_entity_1.Meeting],
                 synchronize: false,
             }),

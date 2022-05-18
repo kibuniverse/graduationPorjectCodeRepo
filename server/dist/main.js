@@ -9,6 +9,7 @@ const CookieParser = require("cookie-parser");
 const handle_exception_filter_1 = require("./handle-exception.filter");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.setGlobalPrefix('api');
     app.useGlobalInterceptors(new resp_interceptor_1.RespInterceptor());
     app.useGlobalPipes(new common_1.ValidationPipe());
     app.useGlobalFilters(new handle_exception_filter_1.HandleExceptionFilter());

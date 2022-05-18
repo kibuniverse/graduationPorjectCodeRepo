@@ -32,6 +32,9 @@ let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
+    hello() {
+        return 'hello world';
+    }
     async login(loginDto, resp) {
         const res = await this.appService.login(loginDto);
         if (res) {
@@ -52,6 +55,12 @@ let AppController = class AppController {
         }
     }
 };
+__decorate([
+    (0, common_1.Get)('hello'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "hello", null);
 __decorate([
     (0, common_1.Post)('/login'),
     __param(0, (0, common_1.Body)()),

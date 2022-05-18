@@ -29,6 +29,7 @@ export class UsersController {
 
   @Get('/userInfo/:uid')
   async getUserInfo(@Param('uid') uid: string) {
+    console.log(`selece ${uid} user info`)
     return await this.usersService.findOne(+uid);
   }
 
