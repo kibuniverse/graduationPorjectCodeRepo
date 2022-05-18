@@ -1,9 +1,9 @@
 import { getUserId } from './getUserInfo';
 
-export const protocol = 'http://';
-export const ip = '127.0.0.1';
-export const port = 3000;
-const uri = `${protocol}${ip}:${port}`;
+export const protocol = 'https://';
+export const ip = 'kizy.cc/api';
+export const port = '';
+const uri = `${protocol}${ip}${port && `:${port}`}`;
 const Post = (path) => ({
   method: 'Post',
   url: uri + path,
@@ -23,11 +23,12 @@ export const meetingApi = {
 };
 
 export const userApi = {
-  getUserInfo: (uid) => get(`/user/info/${uid}`),
+  getUserInfo: (uid) => get(`/user/userInfo/${uid}`),
   getUserInfoByUsername: (username: string) => get(`/users/name/${username}`),
   changePsd: Post('/users/changePsd'),
 };
 
 export const loginApi = {
   login: Post('/login'),
+  register: Post('/register'),
 };

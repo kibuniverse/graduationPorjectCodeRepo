@@ -1,6 +1,6 @@
 import { Carousel } from '@arco-design/web-react';
 import React from 'react';
-import bannerImage from '../../assets/login-banner.jpg';
+import bannerImage from '../../assets/login-banner.png';
 
 import styles from './style/index.module.less';
 

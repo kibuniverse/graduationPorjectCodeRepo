@@ -49,7 +49,7 @@ function Index() {
     const uid = getUserId();
 
     axios
-      .get(`http://127.0.0.1:3000/users/userInfo/${uid}`, { withCredentials: true })
+      .get(`https://kizy.cc/api/users/userInfo/${uid}`, { withCredentials: true })
       .then((res) => {
         store.dispatch({
           type: 'update-userInfo',

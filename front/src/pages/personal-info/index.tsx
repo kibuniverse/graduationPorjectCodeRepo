@@ -14,14 +14,13 @@ const FormItem = Form.Item;
 export default function PersonalInfo() {
   const [form] = Form.useForm();
   const userInfo = useSelector((state: ReducerState) => state.global.userInfo);
+
   const handleChangePassword = _.throttle((value: Record<string, any>) => {
     const data = {
       uid: userInfo.id,
       ...value,
     };
-    console.log(value);
     post({ url: userApi.changePsd.url, data }).then((res) => {
-      console.log(res);
       if (res.status === ResponseStatus.success) {
         Message.success(res.msg);
       } else {

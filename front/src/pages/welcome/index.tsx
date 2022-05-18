@@ -96,7 +96,7 @@ export default function Welcome() {
   }, [queryRoomInfo]);
   const history = useHistory();
   const socket = React.useMemo(() => {
-    const socketIo = io('ws://127.0.0.1:3000', {
+    const socketIo = io('ws://kizy.cc:3000', {
       path: '/living-info',
       withCredentials: true,
     });
