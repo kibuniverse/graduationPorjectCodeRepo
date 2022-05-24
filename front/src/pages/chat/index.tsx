@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Avatar, Input, Comment, Card } from '@arco-design/web-react';
 import io from 'socket.io-client';
 import styles from './index.module.less';
-import { ip, port } from '../../utils/api';
 
 export default function Living() {
   const [infoList, setInfoList] = React.useState<any[]>([]);
@@ -19,8 +18,8 @@ export default function Living() {
   //   return userList;
   // }, [users, onlineUidList]);
   const socket = React.useMemo(() => {
-    const socketIo = io(`ws://${ip}:${port}`, {
-      path: '/chat',
+    const socketIo = io(`wss://kizy.cc`, {
+      path: '/api/chat',
       withCredentials: true,
     });
     return socketIo;

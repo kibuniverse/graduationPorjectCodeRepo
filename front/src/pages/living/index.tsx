@@ -11,11 +11,11 @@ const LivingMeeting = () => {
     userId: username,
     autoJoin,
   };
-  const src = addObj2Url('http://127.0.0.1:3001/basic-rtc', param);
+  const src = addObj2Url('https://kizy.cc/video/basic-rtc.html', param);
   const uid = getUserId();
   const socket = React.useMemo(() => {
-    const socketIo = io('ws://kizy.cc:3000', {
-      path: '/living-info',
+    const socketIo = io('wss://kizy.cc', {
+      path: '/api/living-info',
       withCredentials: true,
     });
     socketIo.emit('enter', {

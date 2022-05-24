@@ -96,8 +96,8 @@ export default function Welcome() {
   }, [queryRoomInfo]);
   const history = useHistory();
   const socket = React.useMemo(() => {
-    const socketIo = io('ws://kizy.cc:3000', {
-      path: '/living-info',
+    const socketIo = io('wss://kizy.cc', {
+      path: '/api/living-info',
       withCredentials: true,
     });
     socketIo.emit('enter', {

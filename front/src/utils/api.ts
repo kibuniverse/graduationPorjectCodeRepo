@@ -30,5 +30,5 @@ export const userApi = {
 
 export const loginApi = {
   login: Post('/login'),
-  register: Post('/register'),
+  register: Post('/users'),
 };
