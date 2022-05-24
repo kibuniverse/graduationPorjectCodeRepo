@@ -19,7 +19,7 @@ export default function Living() {
   // }, [users, onlineUidList]);
   const socket = React.useMemo(() => {
     const socketIo = io(`wss://kizy.cc`, {
-      path: '/api/chat',
+      path: '/api/living',
       withCredentials: true,
     });
     return socketIo;
@@ -95,21 +95,6 @@ export default function Living() {
     <div>
       <div className="Home">
         <Card title="在线大厅">
-          {/* <div className={styles.onlineUsers}>
-            <List
-              dataSource={onLineUserInfoList}
-              render={(item, index) => {
-                return (
-                  <List.Item key={index}>
-                    <List.Item.Meta
-                      avatar={<Avatar shape="square">{item.username}</Avatar>}
-                      title={item.username}
-                    />
-                  </List.Item>
-                );
-              }}
-            />
-          </div> */}
           <div className={styles.chatContent}>
             {infoList.map((value, index) => {
               if (value.type === 'enter') {
