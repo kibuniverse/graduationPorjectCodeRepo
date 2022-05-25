@@ -12,9 +12,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { params } from 'src/utils';
-import { Api } from 'src/utils/trtc-gen-sig';
+
 @WebSocketGateway({
-  path: '/chat',
+  path: '/api/living',
   allowEIO3: true,
   cors: {
     origin: /.*/,
@@ -22,8 +22,7 @@ import { Api } from 'src/utils/trtc-gen-sig';
   },
 })
 export class LivingGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   private logger: Logger = new Logger('LivingGateway');
   @WebSocketServer() private ws: Server; // socket实例
   private users: any = {}; // 人员信息
@@ -31,19 +30,20 @@ export class LivingGateway
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   /**
    * 初始化
    */
   afterInit() {
-    this.logger.log('websocket init ...');
+    this.logger.log('living websocket init ...');
   }
 
   /**
    * 链接成功
    */
   async handleConnection(client: Socket) {
+    console.log('accept living income')
     const cookieObj = params.parseCookieFromSocketClient(client);
     const { uid = 2 } = cookieObj;
     if (this.onlineUidList.includes(uid)) {
@@ -81,10 +81,14 @@ export class LivingGateway
    */
   @SubscribeMessage('message')
   handleMessage(client: Socket, data: any): void {
-    const { uid } = params.parseCookieFromSocketClient(client);
+    let { uid } = params.parseCookieFromSocketClient(client);
+    const { msg } = data;
+    if (!uid) {
+      uid = data.uid || 2;
+    }
     this.ws.emit('message', {
       uid,
-      msg: data,
+      msg,
       time: new Date().getTime(),
     });
   }

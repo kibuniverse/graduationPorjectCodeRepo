@@ -7,8 +7,13 @@ const app_module_1 = require("./app.module");
 const resp_interceptor_1 = require("./resp.interceptor");
 const CookieParser = require("cookie-parser");
 const handle_exception_filter_1 = require("./handle-exception.filter");
+const fs_1 = require("fs");
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const httpsOptions = {
+        key: (0, fs_1.readFileSync)('/etc/nginx/kizy.cc.key'),
+        cert: (0, fs_1.readFileSync)('/etc/nginx/kizy.cc_bundle.crt')
+    };
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, {});
     app.setGlobalPrefix('api');
     app.useGlobalInterceptors(new resp_interceptor_1.RespInterceptor());
     app.useGlobalPipes(new common_1.ValidationPipe());

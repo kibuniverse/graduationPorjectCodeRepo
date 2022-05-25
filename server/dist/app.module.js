@@ -34,7 +34,7 @@ AppModule = __decorate([
                 port: 3306,
                 username: 'root',
                 password: 'Yankaizhi123.',
-                database: 'ceg',
+                database: 'seg',
                 entities: [user_entity_1.User, meeting_entity_1.Meeting],
                 synchronize: false,
             }),

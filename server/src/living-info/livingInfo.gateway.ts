@@ -14,7 +14,7 @@ import { Repository } from 'typeorm';
 import { Meeting } from 'src/meeting/entities/meeting.entity';
 
 @WebSocketGateway({
-  path: '/living-info',
+  path: '/api/living-info',
   allowEIO3: true,
   cors: {
     origin: /.*/,
@@ -22,8 +22,7 @@ import { Meeting } from 'src/meeting/entities/meeting.entity';
   },
 })
 export class LivingInfoGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   private logger: Logger = new Logger('LivingGateway');
   @WebSocketServer() private ws: Server; // socket实例
   private roomList: {
@@ -38,24 +37,24 @@ export class LivingInfoGateway
     private userRepository: Repository<User>,
     @InjectRepository(Meeting)
     private meetingRepository: Repository<Meeting>,
-  ) {}
+  ) { }
 
   /**
    * 初始化
    */
   afterInit() {
-    this.logger.log('在线用户 list socket init ...');
+    this.logger.log('living-info websocket init ...');
   }
 
   /**
    * 链接成功
    */
-  async handleConnection(client: Socket) {}
+  async handleConnection(client: Socket) { }
 
   /**
    * 断开链接
    */
-  handleDisconnect(client: Socket) {}
+  handleDisconnect(client: Socket) { }
   /**
    * 监听发送消息
    */
