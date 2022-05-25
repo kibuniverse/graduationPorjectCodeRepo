@@ -14,7 +14,7 @@ import { Repository } from 'typeorm';
 import { params } from 'src/utils';
 
 @WebSocketGateway({
-  path: '/living',
+  path: '/api/living',
   allowEIO3: true,
   cors: {
     origin: /.*/,

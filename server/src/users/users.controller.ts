@@ -15,7 +15,7 @@ import { failResponse, successResponse } from 'src/utils/handleResponse';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
@@ -29,7 +29,6 @@ export class UsersController {
 
   @Get('/userInfo/:uid')
   async getUserInfo(@Param('uid') uid: string) {
-    console.log(`selece ${uid} user info`)
     return await this.usersService.findOne(+uid);
   }
 

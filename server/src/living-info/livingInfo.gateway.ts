@@ -14,7 +14,7 @@ import { Repository } from 'typeorm';
 import { Meeting } from 'src/meeting/entities/meeting.entity';
 
 @WebSocketGateway({
-  path: '/living-info',
+  path: '/api/living-info',
   allowEIO3: true,
   cors: {
     origin: /.*/,

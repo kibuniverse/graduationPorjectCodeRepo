@@ -5,9 +5,16 @@ import { AppModule } from './app.module';
 import { RespInterceptor } from './resp.interceptor';
 import * as CookieParser from 'cookie-parser';
 import { HandleExceptionFilter } from './handle-exception.filter';
+import { readFileSync } from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const httpsOptions = {
+    key: readFileSync('/etc/nginx/kizy.cc.key'),
+    cert: readFileSync('/etc/nginx/kizy.cc_bundle.crt')
+  }
+
+
+  const app = await NestFactory.create(AppModule, {});
   app.setGlobalPrefix('api');
   // 拦截器，统一输出
   app.useGlobalInterceptors(new RespInterceptor());
@@ -28,6 +35,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
+
+  // 开启 https
 
   await app.listen(3000);
 }

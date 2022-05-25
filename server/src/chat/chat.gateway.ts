@@ -14,7 +14,7 @@ import { Repository } from 'typeorm';
 import { params } from 'src/utils';
 
 @WebSocketGateway({
-  path: '/chat',
+  path: '/api/chat',
   allowEIO3: true,
   cors: {
     origin: /.*/,
@@ -54,13 +54,12 @@ export class ChatGateway
 
   @SubscribeMessage('join')
   async handleJoinRoom(client: Socket, data) {
-    const { uid } = params.parseCookieFromSocketClient(client);
+    const { uid, roomId } = data
     const user = await this.userRepository.findOne({
       where: { id: Number(uid) },
     });
+    console.log('enter room', data)
     this.users[uid] = user;
-    console.log(uid, user);
-    const { roomId } = data;
     if (this.roomSocket[roomId]) {
       this.roomSocket[roomId].push(client);
       this.roomSocket[roomId].forEach((item) => {
@@ -88,8 +87,8 @@ export class ChatGateway
    */
   @SubscribeMessage('message')
   handleMessage(client: Socket, data: any): void {
-    const { roomId, msg } = data;
-    const { uid } = params.parseCookieFromSocketClient(client);
+    const { roomId, msg, uid } = data;
+    console.log('reveice data', data)
     this.roomSocket[roomId].forEach((item) => {
       item.emit('message', {
         uid,
