@@ -2,11 +2,16 @@ import * as React from 'react';
 import { Avatar, Input, Comment, Card } from '@arco-design/web-react';
 import io from 'socket.io-client';
 import styles from './index.module.less';
+import { getUserId, userInfo } from '../../utils';
 
 export default function Living() {
   const [infoList, setInfoList] = React.useState<any[]>([]);
   // const [onlineUidList, setOnlineUidList] = React.useState<string[]>([]);
-  const [users, setUsers] = React.useState<Record<string, Record<string, string | number>>>({});
+  const uid = getUserId();
+  const [users, setUsers] = React.useState<Record<string, Record<string, string | number>>>({
+    [uid]: userInfo,
+  });
+  const [input, setInput] = React.useState('');
   // const onLineUserInfoList = React.useMemo(() => {
   //   const existUserList = onlineUidList.filter((uid) => users[uid]);
   //   const userList = existUserList.map((uid) => {
@@ -22,6 +27,8 @@ export default function Living() {
       path: '/api/living',
       withCredentials: true,
     });
+    socketIo.on('enter', enterRoom);
+
     return socketIo;
   }, []);
 
@@ -46,7 +53,9 @@ export default function Living() {
     users: Record<string, Record<string, string | number>>;
     onlineUidList: string[];
   }) {
+    console.log(data);
     const { uid, users } = data;
+    console.log('enterRoom', data);
     // setOnlineUidList(onlineUidList);
     setUsers(users);
     setInfoList(
@@ -61,6 +70,7 @@ export default function Living() {
    * 接收消息
    */
   function messageRoom(data: { uid: string; msg: string }) {
+    console.log(data);
     const { uid, msg } = data;
     setInfoList(
       infoList.concat({
@@ -85,9 +95,14 @@ export default function Living() {
     );
   }
 
-  const onSearch = (value) => {
-    if (value) {
-      socket.emit('message', value);
+  const onSearch = () => {
+    if (input) {
+      const data = {
+        msg: input,
+        uid,
+      };
+      socket.emit('message', data);
+      setInput('');
     }
   };
 
@@ -126,7 +141,12 @@ export default function Living() {
             })}
           </div>
           <div className="input-wrap">
-            <Input.Search className="sentInput" onSearch={onSearch} />
+            <Input.Search
+              value={input}
+              onChange={setInput}
+              searchButton="发送"
+              onSearch={onSearch}
+            />
           </div>
         </Card>
       </div>

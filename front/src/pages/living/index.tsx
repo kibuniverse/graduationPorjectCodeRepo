@@ -26,21 +26,17 @@ const LivingMeeting = () => {
   const uid = getUserId();
   const message = React.useCallback(
     (data) => {
-      console.log(data, users.current);
-      console.log(infoList);
       const { uid, msg } = data;
       const newInfoList = [
         ...infoList,
         { type: EmitType.Message, msg, name: users.current[uid].username },
       ];
-      console.log('newInfoList', newInfoList);
       setInfoList(newInfoList);
     },
     [infoList]
   );
   const update = React.useCallback(
     (data) => {
-      console.log('接收到enter事件');
       users.current = data.users;
       const newInfoList = [
         ...infoList,
@@ -51,17 +47,15 @@ const LivingMeeting = () => {
     [infoList]
   );
   const socket = React.useMemo(() => {
-    const socketIo = io('wss://kizy.cc', {
+    const socketIo = io(`wss://kizy.cc`, {
       path: '/api/chat',
       withCredentials: true,
     });
-
     socketIo.emit('join', {
       uid,
       type: 'meeting',
       roomId,
     });
-
     return socketIo;
   }, []);
   React.useEffect(() => {
@@ -75,8 +69,6 @@ const LivingMeeting = () => {
       socket.disconnect();
     };
   }, []);
-
-  console.log(infoList);
 
   function onSearch() {
     const sendData = {
