@@ -22,8 +22,7 @@ import { params } from 'src/utils';
   },
 })
 export class ChatGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   private logger: Logger = new Logger('ChatGateway');
   @WebSocketServer() private ws: Server; // socket实例
   private users: any = {}; // 人员信息
@@ -32,13 +31,13 @@ export class ChatGateway
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   /**
    * 初始化
    */
   afterInit() {
-    this.logger.log('websocket init ...');
+    this.logger.log('chat websocket init  ...');
   }
 
   /**

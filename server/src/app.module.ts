@@ -20,7 +20,7 @@ import { LivingInfoModule } from './living-info/livingInfo.module';
       port: 3306,
       username: 'root',
       password: 'Yankaizhi123.',
-      database: 'ceg',
+      database: 'seg',
       entities: [User, Meeting],
       synchronize: false,
     }),
