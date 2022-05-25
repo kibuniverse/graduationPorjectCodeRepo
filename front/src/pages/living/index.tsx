@@ -58,6 +58,18 @@ const LivingMeeting = () => {
     });
     return socketIo;
   }, []);
+  const socketLivingInfo = React.useMemo(() => {
+    const socketIo = io(`wss://kizy.cc`, {
+      path: '/api/living-info',
+      withCredentials: true,
+    });
+    socketIo.emit('enter', {
+      uid,
+      type: 'meeting',
+      roomId,
+    });
+    return socketIo;
+  }, []);
   React.useEffect(() => {
     socket.removeAllListeners();
     socket.on('enter', update);
@@ -65,8 +77,9 @@ const LivingMeeting = () => {
   }, [socket, infoList]);
   React.useEffect(() => {
     return () => {
-      socket.emit('leave', { uid, roomId, type: 'meeting' });
+      socketLivingInfo.emit('leave', { uid, roomId, type: 'meeting' });
       socket.disconnect();
+      socketLivingInfo.disconnect();
     };
   }, []);
 
