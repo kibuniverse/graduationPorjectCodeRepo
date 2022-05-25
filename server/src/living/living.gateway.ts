@@ -81,10 +81,14 @@ export class LivingGateway
    */
   @SubscribeMessage('message')
   handleMessage(client: Socket, data: any): void {
-    const { uid } = params.parseCookieFromSocketClient(client);
+    let { uid } = params.parseCookieFromSocketClient(client);
+    const { msg } = data;
+    if (!uid) {
+      uid = data.uid || 2;
+    }
     this.ws.emit('message', {
       uid,
-      msg: data,
+      msg,
       time: new Date().getTime(),
     });
   }
